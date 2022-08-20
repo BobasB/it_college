@@ -12,25 +12,12 @@
     - разом з ним будуть інстальовані ще декілька плагінів такі як `Jupyter`, які на будуть потрібними;
 1. створіть новий файл з розширенням `.py`, наприклад `my_first_app.py` та скопіюйте в нього код програми з попереднього файлу;
 ```python
-class MyName:
-    def __init__(self, name="NoName") -> None:
-        self.name = name # Class attributes
-    
-    @property
-    def whoami(self): #Class property
-        return f"My name is {self.name}"
+from datetime import datetime
+name = "Bohdan"
 
-    def create_email(self): #Classs method
-        return f"{self.name}@itcollege.com"
-
-
-name = MyName("Bohdan") #обєкт класу
-print(name)
-print(name.whoami)
-print(name.create_email())
+print(f"{name} start programming at {datetime.now()}")
 ```
-1. змініть значення атрибуту `name` яке передається у клас на Ваше імя;
-1. натисніть на кнопку `Run Python File` (трикутник :arrow_forward:) щоб запустити програму;
+1. змініть значення змінної `name` на Ваше імя та натисніть на кнопку `Run Python File` (трикутник :arrow_forward:) щоб запустити програму;
 1. :star: вкажіть у звіті що вивела пограма або зробіть скріншот та вставте у звіт;
 1. створіть новий файл з розширенням `.ipynb`, наприклад `my_first_app.ipynb`. Він буде поділений на комірки;
 1. скопіюйте код у першу комірку, натисніть кнопку `Run All` вверху або `Execute Cell` зліва (трикутник :arrow_forward:);

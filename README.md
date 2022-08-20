@@ -1,2 +1,2 @@
-# it_college
-IT college main repository
+# IT College
+Repository devoted to learning activities in Lviv IT College.
