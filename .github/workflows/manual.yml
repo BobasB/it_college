@@ -25,18 +25,16 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python: [3.10]
+        python: ["3.10"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Runs a single command using the runners shell
     - name: Send greeting
       run: echo "Hello ${{ github.event.inputs.name }}"
-    - name: Checkout
-      uses: actions/checkout@v3
-    - name: set-up python
+    - name: Set-up Python
       uses: actions/setup-python@v4.2.0
       with:
         python-version: ${{ matrix.python }}
-    - name: Get python Version
+    - name: Get Python Version
       run: python --version
