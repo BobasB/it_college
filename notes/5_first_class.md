@@ -3,7 +3,8 @@
 ### Створюємо перший class
 1. Створіть два python файли: для Ноутбука з розширенням `.ipynb` та для скрипта з розширенням `.py`;
 1. Скопіюйте Python код наведений внизу у Ваші файли та виконайте їх натиснувши `Run Python File` (трикутник :arrow_forward:); 
-<details><summary>Python Code</summary>
+
+<details><summary> >>>>>> Python Code <<<<<< </summary>
 
 ### Перша програма на ООП
 ```python
