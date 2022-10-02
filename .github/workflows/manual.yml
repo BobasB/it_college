@@ -6,9 +6,8 @@ name: Manual workflow
 # or API.
 on:
   schedule:
-    # 
     - cron: '*/10 * * * 0'
-  workflow_call:
+  workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
       name:
