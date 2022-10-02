@@ -6,7 +6,7 @@ name: Cron workflow
 # or API.
 on:
   schedule:
-    - cron: '*/10 * * * *' # Every 10 min
+    - cron: '20 * * * *' # Every 10 min
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
