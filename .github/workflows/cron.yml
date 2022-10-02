@@ -6,12 +6,12 @@ name: Cron workflow
 # or API.
 on:
   schedule:
-    - cron: '20 * * * *' # Every 10 min
+    - cron: '0 17 * * sun' # Run every Sunday at 17.00
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "setUpPython"
-  setUpPython:
+  setuppython:
     name: Simple manual trigger
     # The type of runner that the job will run on
     runs-on: ubuntu-latest

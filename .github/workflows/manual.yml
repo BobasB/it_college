@@ -38,7 +38,9 @@ jobs:
       uses: actions/setup-python@v4.2.0
       with:
         python-version: ${{ matrix.python }}
+      if: github.event.inputs.name != 'Executer'
     - name: Get Python Version
+      if: github.event.inputs.name != 'Executer'
       run: |
         python --version
         python -c 'import datetime; print(f"This Workflow start at: {datetime.datetime.now()}")'
