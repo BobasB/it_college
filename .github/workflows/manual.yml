@@ -5,6 +5,9 @@ name: Manual workflow
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
 on:
+  schedule:
+    # 
+    - cron: '20 15 * * 0'
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
@@ -30,6 +33,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Runs a single command using the runners shell
+    - uses: actions/checkout@v3
     - name: Send greeting
       run: echo "Hello ${{ github.event.inputs.name }}"
     - name: Set-up Python
@@ -37,4 +41,6 @@ jobs:
       with:
         python-version: ${{ matrix.python }}
     - name: Get Python Version
-      run: python --version
+      run: |
+        python --version
+        python -c 'import datetime; print(f"This Workflow start at: {datetime.datetime.now()}")'
