@@ -44,3 +44,17 @@ jobs:
       run: |
         python --version
         python -c 'import datetime; print(f"This Workflow start at: {datetime.datetime.now()}")'
+  goodbye:
+    name: Say goodbye
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10"]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Runs a single command using the runners shell
+    - uses: actions/checkout@v3
+    - name: Say goodbye
+      if: github.event.inputs.name == 'Executer'
+      run: echo "Goodbye ${{ github.event.inputs.name }}"
