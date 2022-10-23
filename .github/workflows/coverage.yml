@@ -51,6 +51,7 @@ jobs:
       run: |
         cd example/coverage_io/
         coverage run -m unittest -v
+        coverage xml
     # відсилаємо його в Coverage
     - name: Upload Coverage to Codecov
       uses: codecov/codecov-action@v3
