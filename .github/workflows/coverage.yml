@@ -53,6 +53,6 @@ jobs:
         coverage run -m unittest -v
     # відсилаємо його в Coverage
     - name: Upload Coverage to Codecov
-      uses: codecov/codecov-action@v2
+      uses: codecov/codecov-action@v3
       with:
         directory: example/coverage_io/   
