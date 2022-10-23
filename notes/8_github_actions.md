@@ -76,9 +76,42 @@ jobs:
 
 ---
 
-### Інтеграфія з Coverage
+### Інтеграція з Coverage (Додатково)
 1. Перейдіть на сайт [codecov.io](https://about.codecov.io/) та здійсніть вхід (`Login`) за допомогою аккаунту GitHub.
-2. Створіть крок Workflow який буде інсталювати необхадні пакети Python
+2. Створіть крок Workflow у файлі `./github/workflows/actions.yml` який буде інсталювати необхадні пакети Python. Крок додаються у секції `steps`:
+    ```yml
+    # встановлюємо Python пакети
+    - name: Install dependencies
+      run: |
+        pip install pytest coverage
+    ```
+3. Створіть крок який буде виконувати тести.
+    ```yml
+    # встановлюємо Python пакети
+    - name: Install dependencies
+      run: |
+        pcd example/coverage_io/
+        pytest test.py -v
+    ```
+4. Додаємо два кроки, перший крок який створює звіт та другий відсилає його в Coverage. Якщо тести знаходяться не в кореневій папці, не вказати правильний шлях або перейти в правильну папку. У даному прикладі тести знаходяться у папці `example/coverage_io/`:
+    ```yml
+    # генеруємо звіт
+    - name: Generate Report
+      run: |
+        cd example/coverage_io/
+        coverage run -m unittest -v
+        coverage xml
+    # відсилаємо його в Coverage
+    - name: Upload Coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        directory: example/coverage_io/ 
+    ```
+5. Запустіть Workflow через вкладку `Actions` та переконайтесь що кроки виконались.
+6. Додайте Бадж з результатами покриття. На сайті [codecov.io](https://about.codecov.io/) перейдіть у потрібний репозиторій, виберіть вкладку `Settings -> Badges & Grapth` та скопіюйте йже готовий Бадж у форматі Markdown. Вставте скопійований Бадж у README файл. Результат представлений внизу:
+
+    [![codecov](https://codecov.io/gh/BobasB/it_college/branch/main/graph/badge.svg?token=QIL2SPR92K)](https://codecov.io/gh/BobasB/it_college)
+
 ---
 
 ### Здача роботи
