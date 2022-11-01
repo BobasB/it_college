@@ -5,3 +5,7 @@ Repository devoted for learning activities in Lviv IT College.
 - `notes`: Notes how to do Labs;
 - `reports`: Report Examples;
 ---
+
+# [Lab Examples](./notes/README.md)
+
+---
