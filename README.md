@@ -6,6 +6,6 @@ Repository devoted for learning activities in Lviv IT College.
 - `reports`: Report Examples;
 ---
 
-# [Lab Examples](./notes/README.md)
+# [Labs / Works](./notes/README.md)
 
 ---
