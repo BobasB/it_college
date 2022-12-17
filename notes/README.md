@@ -14,6 +14,7 @@
 1. [Автоматизація з GitHub Actions](./8_github_actions.md);
 > СУБД 
 1. [Робота з Базами даних](./9_databases.md);
+> Оформлення Резюме
 1. [Статичні сайти, GitHub Pages](./10_github_pages.md);
 > Python Data Science 
 1. [Чисельні методи та робота з `NumPy`](./11_numpy.md);
