@@ -9,7 +9,7 @@ pip install matplotlib
 
 1. Для роботи з бібліотекою будемо працювати інтерактивно в Jupytere Notebook.
 
-    [>>> Посилання на Notebook <<<](./12/test_matplotlib.ipynb)
+    [>>> Посилання на Notebook <<<](./12/1_matplotlib.ipynb)
 
 1. TODO
 

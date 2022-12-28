@@ -2,3 +2,5 @@ my_env/*
 example/coverage_io/__pycache__/
 example/coverage_io/.coverage
 example/coverage_io/coverage.xml
+temp.csv
+*.npz
