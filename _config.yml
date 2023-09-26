@@ -1,5 +1,5 @@
-title: Portfolio Example
-description: Shows how to create portfolio for students.
+title: Як почати працювати в ІТ
+description: Виконання завдань по роботі в ІТ галузі. 
 remote_theme: pages-themes/midnight@v0.2.0
 plugins:
 - jekyll-remote-theme
