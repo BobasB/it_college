@@ -33,5 +33,5 @@
 - встановлюєте редактор (Community edition) Visual Studio Code: https://code.visualstudio.com/
     - у випадку якщо 32 бітна система то потрібн скачати стару версію https://update.code.visualstudio.com/1.83.1/win32/stable
 - зареєструвати новий акаунт на Github.com;
-
+- якщо потрібно скинути налаштування доступу до Github на Windows читайте https://stackoverflow.com/questions/15381198/remove-credentials-from-git
 ---
