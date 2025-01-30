@@ -124,11 +124,15 @@
 ### Юніт тести з використання бібліотеки PyTest
 > PyTest це стороння бібліотета для тестування коду
 
-1. Більш докладно про бібліотеку [PyTest](https://docs.pytest.org/en/7.1.x/) можна прочитати на офіційному сайті. Оскільки, це стороння бібліотека її потрібно інсталювати. Для цього використаємо віртальні середовища та інструмент `pipenv` (якщо `pipenv` буде некоректно працювати на Windows встановіть бібліотеку за допомогою `pip`). Бібліотеки для юніт тестів краще ставити в `--dev` середовище.
+1. Більш докладно про бібліотеку [PyTest](https://docs.pytest.org/en/7.1.x/) можна прочитати на офіційному сайті. Оскільки, це стороння бібліотека її потрібно інсталювати. Для цього використаємо віртальні середовища та інструмент `pipenv` або `poetry` (якщо `pipenv` буде некоректно працювати на Windows встановіть бібліотеку за допомогою `pip`). Бібліотеки для юніт тестів краще ставити в `--dev` середовище.
     ```bash
-    pipenv --python 3.10
+    pipenv --python 3.12
     pipenv install pytest --dev
     pipenv install --dev
+    # або
+    poetry init --name your_project --description "Your project description" --author "Your Name <your@email.com>"
+    poetry add --dev pytest black flake8
+    poetry install --with dev 
     ```
 2. Дана бібліотека може працювати як з вбудованими тестами які ми вже маємо, так і з будь-якими функціями які розпочинаються з слова `test_`. Для прикладу зробимо простий тест та помістимо всередині того ж файлу де і наш клас `Figure`:
     - створюємо простий тест у файл `app.py`:
@@ -142,12 +146,12 @@
     ```
     - запускаємо тести за допомогою `pytest`:
     ```bash
-    pipenv run pytest app.py
+    poetry run pytest app.py
     ```
 3. :star: вкажіть у звіті що вивела програма та чи виконалась функція `test_app_triangle`.
 4. Для виклику всіх тестів з файлу `test.py` потібно передати даний файл як аргумент `pytest`:
     ```bash
-    pipenv run pytest test.py
+    poetry run pytest test.py
     ```
 
 ---
@@ -157,28 +161,28 @@
 1. Можна використовувати бібліотеку [coverage](https://coverage.readthedocs.io/en/6.5.0/) або плагін [pytest-cov](https://pytest-cov.readthedocs.io/en/latest/readme.html).
     - для інсталяції потрібно виконати наступні команди:
     ```bash
-    pipenv install coverage --dev
+    pipenv install coverage pytest-cov --dev
     # АБО
-    pipenv install pytest-cov --dev
+    poetry add --dev coverage pytest-cov
     ```
 1. Для виводу покриття коду тестами потрібно або використовувати новий інструмент `coverage` або передавати аргументи у виклик `pytest`.
-    - запуска тестів (у репозиторії має зявитись файл `.coverage`):
+    - запуск тестів (у репозиторії має зявитись файл `.coverage`):
     ```bash
     python -m unittest discover
     ```
     - виклик `coverage`:
     ```bash
-    pipenv run python -m coverage report
+    poetry run python -m coverage report
     # АБО
-    pipenv run coverage run -m pytest tests.py
+    poetry run coverage run -m pytest tests.py
     ```
     - виклик через `pytest`. Тут ми передаємо параметр який саме модуль ми хочемо проаналізувати. В даному випадку наша бібліотека з класом знаходиться в файлі `app.py` тому ми передаємо параметр `--cov=app`:
     ```bash
-    pipenv run pytest --cov=app test.py
+    poetry run pytest --cov=app test.py
     ```
 2. :star: Для візуалізації результаів не в консолі а через браузер - згенеруйте звіт у форматі `html`. Отриманий файл повинен бути у звіті.
     ```bash
-    pipenv run python -m coverage html
+    poetry run python -m coverage html
     ```
 
 ---
