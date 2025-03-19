@@ -4,8 +4,6 @@
 1. Створіть два python файли: для Ноутбука з розширенням `.ipynb` та для скрипта з розширенням `.py`;
 1. Скопіюйте Python код наведений внизу у Ваш файл з розширенням `.py` та виконайте його натиснувши `Run Python File` (трикутник :arrow_forward:); 
 
-<details><summary> >>>>>> Python Code <<<<<< </summary>
-
 ### Перша програма на ООП
 ```python
 
@@ -69,7 +67,6 @@ This is class variable {type(MyName.total_names)}: from class {MyName.total_name
 print(f"We are done. We create {me.total_names} names! ??? Why {MyName.total_names}?")
 
 ```
-</details>
 
 1. :star: вкажіть у звіті що вивела пограма або зробіть скріншот та вставте у звіт; 
 1. Виконайте приклади які розглядали на лекції та вставте їх у Ноутбук (файл з розширенням `.ipynb`);

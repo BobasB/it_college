@@ -14,12 +14,13 @@
 > ООП
 
 1. [Створення першого Python класу](./05_OOP_first_class/README.md);
+1. [Парадигми в ООП](./05_OOP_paradigms/README.md);
 1. [Віртуальні середовища](./06_python_virtualenvs/README.md);
 
 > Тестування та автоматизація
 
-1. [Тестування програм](./07_testing/README.md);
-1. [Автоматизація з GitHub Actions](./08_github_actions/README.md);
+1. [Тестування програм та програмних комплексів](./07_testing/README.md);
+1. [Автоматизація тестування з GitHub Actions](./08_github_actions/README.md);
 
 > Python та Базами Даних 
 
