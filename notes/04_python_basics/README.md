@@ -1,5 +1,7 @@
 # Основи програмування на Python
 
+## Мета роботи: __Навчитись застосовувати основні конструкції мови Python, виконати всі приклати та з використанням AI створити власні приклади які демонструють особливості кодових конструкцій Pyhton__
+
 ### Основні конструкції в Python
 1. :star: виконайте приклади коду на Python представлені нижче та вставте їх у звіт;
 1. :star: якщо важко придумати з чим попрацювати в кожному завданні (не знаєте який цикл написати, або яку змінну вивести) - запитайтесь у ChatGPT який би він приклад навів та вставте його відповідь у звіт (перед тим правильно відформутувавши її);
@@ -14,22 +16,24 @@
        e = ("a", a) # Tuple
        f = {"ss", a + b} # Set
         ```
-    1. Виведіть [вбудовані константи](https://docs.python.org/3.11/library/constants.html), (2-3 на вибір), наприклад:
+    1. Виведіть [вбудовані константи](https://docs.python.org/3.12/library/constants.html), (2-3 на вибір), та [зарезервовані слова Python](https://realpython.com/lessons/reserved-keywords/). Наприклад:
        ```python
        print("Перша константа: ", True)
        print(f"І можна так робити вивід? {True}")
+       import sys
+       help("keywords")
        ```
-    1. Виведіть результат роботи [вбудованих функцій](https://docs.python.org/3.11/library/functions.html#func-repr) (2-3 на вибір), наприклад:
+    1. Виведіть результат роботи [вбудованих функцій](https://docs.python.org/3.12/library/functions.html#func-repr) (2-3 на вибір), наприклад:
        ```python
-       print(abs(-12.5), f"є рівним {abs(12.5)}")
+       print(abs(-12.5), f"є рівним {abs(12.5)}", "і якщо порівняти то: ", abs(-12.5) == abs(12.5))
        ``` 
-    1. Познайомтесь з [циклами](https://docs.python.org/3.11/reference/compound_stmts.html#the-for-statement). Напишіть будь-який код який демонструє роботу циклів, (2-3 на вибір), наприклад:
+    1. Познайомтесь з [циклами](https://docs.python.org/3.12/reference/compound_stmts.html#the-for-statement). Напишіть будь-який код який демонструє роботу циклів, (2-3 на вибір), наприклад:
         ```python
         letters = ["a", "b", "c"]
         for i in range(len(letters)):
             print(f"На позиції {i} знаходиться буква {letters[i]}")
         ```
-    1. познайомтесь з [розгалуженнями](https://docs.python.org/3.11/reference/compound_stmts.html#the-if-statement). Напишіть будь-який код який демонструє роботу розгалужень, (2-3 на вибір), наприклад:
+    1. Познайомтесь з [розгалуженнями](https://docs.python.org/3.12/reference/compound_stmts.html#the-if-statement). Напишіть будь-який код який демонструє роботу розгалужень, (2-3 на вибір), наприклад:
        ```python
        A = True
        print("Значить А=True" if A else "Значить А=False")
@@ -50,7 +54,7 @@
            for line in f:
                print(line)
        ```
-    1. Познайомтесь з Python [lambdas](https://docs.python.org/3.10/reference/expressions.html#lambda). Напишіть свій приклад коду та як Ви розумієте Лямбди, наприклад:
+    1. Познайомтесь з Python [lambdas](https://docs.python.org/3.12/reference/expressions.html#lambda). Напишіть свій приклад коду та як Ви розумієте Лямбди, наприклад:
        ```python
        this_is_lambda = lambda first, last: f'Цей код написав: {first} {last}'
        print("Це просто функція:", this_is_lambda)
