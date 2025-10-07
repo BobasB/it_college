@@ -19,7 +19,7 @@
     1. Виведіть [вбудовані константи](https://docs.python.org/3.12/library/constants.html), (2-3 на вибір), та [зарезервовані слова Python](https://realpython.com/lessons/reserved-keywords/). Наприклад:
        ```python
        print("Перша константа: ", True)
-       print(f"І можна так робити вивід? {True}")
+       print(f"Як можна так робити вивід? {True}")
        import sys
        help("keywords")
        ```
@@ -32,35 +32,42 @@
         letters = ["a", "b", "c"]
         for i in range(len(letters)):
             print(f"На позиції {i} знаходиться буква {letters[i]}")
+        else:
+            print("Ця конструкція безглузда!")
         ```
     1. Познайомтесь з [розгалуженнями](https://docs.python.org/3.12/reference/compound_stmts.html#the-if-statement). Напишіть будь-який код який демонструє роботу розгалужень, (2-3 на вибір), наприклад:
-       ```python
-       A = True
-       print("Значить А=True" if A else "Значить А=False")
-       ```
+        ```python
+        from random import randint
+        A = randint(0, 1)
+        print(f"Значить А={A}" if A else "Але може бути що А={}".format(A))
+        ```
     1. Конструкція `try`->`except`->`finally`. У мові Python код не компілюється, а виконується відразу. Можливі помилки нам треба виловлювати самим. Напишіть свій варіант коду з помилкою. Наприклад:
-       ```python
-       A = 0
-       try:
-           print("Що буде якщо", 10/A, "?")
-       except Exception as e:
-           print(e)
-       finally:
-           print("А вот воно що!")
-       ```
+        ```python
+        A = 0
+        try:
+            print("Що буде якщо", 10/A, "?")
+        except Exception as e:
+            print("Невже це помилка > ", e)
+        finally:
+            print("О це так на тобі!")
+        ```
     1. Контекст-менеджер `with`. Можете почитати [тут](https://python-scripts.com/contextlib). Напишіть свій код з контекст-менеджером, наприклад:
-       ```python
-       with open("README.md", "r") as f:
-           for line in f:
-               print(line)
-       ```
+        ```python
+        with open("README.md", "r") as f:
+            for _, line in enumerate(f):
+                print(f"{_})> ", line)
+        ```
     1. Познайомтесь з Python [lambdas](https://docs.python.org/3.12/reference/expressions.html#lambda). Напишіть свій приклад коду та як Ви розумієте Лямбди, наприклад:
-       ```python
-       this_is_lambda = lambda first, last: f'Цей код написав: {first} {last}'
-       print("Це просто функція:", this_is_lambda)
-       print("Це її виклик:", this_is_lambda('Богдан', 'Бугиль'))
-       ```
-1. :star: Запитайте у ChatGPT як би він розписав про основи Python. Спробуйте виконати його приклади Python коду та вставте його відповіді у звіт;
+        ```python
+        def a_b_func(a, b):
+            return a, b
+
+        this_is_lambda = lambda first, age: f'Цей код написав: {first}, Мені {age:10d} років'
+        print("Це просто функція:", a_b_func, "\nА це лямбда:", this_is_lambda)
+        print("Це її виклик:", this_is_lambda('Богдан', 1_00_000))
+        print(this_is_lambda(*a_b_func("a", 1)))
+        ```
+1. :star: Запитайте у АІ як би він розписав про основи Python (задайте промпт вказавши що ви вивчаєте Python з використанням Jupyter Notebook). Спробуйте виконати приклади Python коду та вставте їх відповіді у звіт;
 
 ---
 ### Здача роботи
