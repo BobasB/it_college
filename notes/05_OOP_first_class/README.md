@@ -14,12 +14,14 @@ class MyName:
     total_names = 0 #Class Variable
 
     def __init__(self, name=None) -> None:
+        """Ініціалізація класу
+        """
         self.name = name if name is not None else self.anonymous_user().name #Class attributes / Instance variables
         MyName.total_names += 1 #modify class variable
         self.my_id = self.total_names
 
     @property
-    def whoami(self): 
+    def whoami(self) -> str: 
         """Class property
         return: повертаємо імя 
         """
@@ -44,13 +46,13 @@ class MyName:
         return cls("Anonymous")
     
     @staticmethod
-    def say_hello(message="Hello to everyone!"):
+    def say_hello(message="Hello to everyone!") -> str:
         """Static method
         """
         return f"You say: {message}"
 
 
-print("Let's Start!")
+print("Розпочинаємо створювати обєкти!")
 
 names = ("Bohdan", "Marta", None)
 all_names = {name: MyName(name) for name in names}
@@ -84,10 +86,11 @@ print(f"We are done. We create {me.total_names} names! ??? Why {MyName.total_nam
         ```python
         ValueError("Ім'я може містити лише літери!").
         ```
-    - Додайте нову властивість `full_name`, яка повертає результат у форматі:
+    - додайте нову властивість `full_name`, яка повертає результат у форматі:
         ```python
         "User #<id>: <name> (<email>)"
         ```
+    - реалізуйте метод `save_to_file(filename="users.txt")`, який додає рядок із записом у файл;
 ### Вчимось працювати з класами
 1. Відкрите файл [classes.ipynb](classes.ipynb) та виконайте всі комірки та завдання;
 
