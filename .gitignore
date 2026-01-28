@@ -1,5 +1,6 @@
 my_env/*
 __pycache__/
+.venv/
 .coverage
 coverage.xml
 temp.csv
