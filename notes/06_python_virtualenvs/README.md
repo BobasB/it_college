@@ -10,11 +10,13 @@
     pip --help
     ``` 
 1. :star: Передивіться які дії можна зробити за допомогою `pip`. Перевірте які бібліотеки вже інстальовані на Вашому компютері та вкажіть їх у звіті (скріншот або стрічки що вивелись);
+1. Всі доступні бібліотеки можна знайти на [Pypi](https://pypi.org/). Вони мають документацію та приклади використання. У роботі ми встановлюємо лише декілька бібліотек, але Ви можете встановити будь-яку іншу бібліотеку та спробувати її використати;
 1. Будь-яку сторонню бібліотеку можна встановити на комп'ютер за допомогою `pip install` команди та зразу почати її використовувати, наприклад встановимо бібліотеку [requests](https://requests.readthedocs.io/en/latest/):
     ```bash
     pip install requests
     python #Зайдіть в пайтон інтерпретатор
     >>> import requests
+    >>> requests.__version__
     >>> r = requests.get('https://google.com')
     >>> r.status_code
     >>> exit()
@@ -29,31 +31,37 @@
     pip uninstall requests
     ```
 1. :star: Вкажіть у звіті результат виконання команд.
-1. :star: Для любителів Аніме, можна поекспериментувати з бібліотекою [jikanpy](https://pypi.org/project/jikanpy-v4/) яка є АПІ для роботи з [Аніме сайтом  MyAnimeList.net](https://myanimelist.net/) та запустити наступний код який веведе оцінки епізодів Аніме серіалу;
-    ```python
-    from flask import Flask, render_template
-    from jikanpy import Jikan
+1. :star: Для любителів Аніме, можна поекспериментувати з бібліотекою [jikanpy](https://pypi.org/project/jikanpy-v4/) яка є АПІ для роботи з [Аніме сайтом  MyAnimeList.net](https://myanimelist.net/) та запустити наступний код який виведе оцінки епізодів Аніме серіалу:
+    - спочатку інсталюйте бібліотеку `jikanpy` та `Flask` за допомогою:
+        ```bash
+        pip install jikanpy-v4 Flask
+        ```
+    - створіть файл `anime.py` та вставте в нього наступний код:
+        ```python
+        from flask import Flask, render_template
+        from jikanpy import Jikan
 
-    jikan = Jikan()
-    app = Flask(__name__)
+        jikan = Jikan()
+        app = Flask(__name__)
 
-    j = jikan.anime(54595, extension='episodes')
+        j = jikan.anime(54595, extension='episodes')
 
-    @app.route('/')
-    def home():
-        a = str()
-        for episode in j["data"]: 
-            a += f"<p>Епізод {episode['mal_id']} з назвою: {episode['title']} має оцінку {episode['score']}<p>"
-        return a
+        @app.route('/')
+        def home():
+            a = str()
+            for episode in j["data"]: 
+                a += f"<p>Епізод {episode['mal_id']} з назвою: {episode['title']} має оцінку {episode['score']}<p>"
+            return a
 
-    @app.route('/about')
-    def about():
-        return render_template('about.html')
+        @app.route('/about')
+        def about():
+            return render_template('about.html')
 
-    if __name__ == '__main__':
-        app.run(debug=True)
-    ```
-1. :star: Запустіть програму вище та вкажіть у робуті результат її виконання;
+        if __name__ == '__main__':
+            app.run(debug=True)
+        ```
+    - :star: Запустіть програму вище та вкажіть у роботі результат її виконання;
+    - :star: Спробуйде знайти які аніме серіали виходять у цьому сезоні та виведіть їх оцінки за допомогою бібліотеки `jikanpy`;
 
 ---
 ### Робота у віртуальному середовищі 
