@@ -1,7 +1,7 @@
-# This is a basic workflow that is manually triggered
+# Закоментовано та змінено розширення файлу на .md для збереження форматування та можливості перегляду в GitHub.
 
 #name: Cron workflow
-#
+
 ## Controls when the action will run. Workflow runs when manually triggered using the UI
 ## or API.
 #on:
