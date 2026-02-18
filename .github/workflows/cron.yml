@@ -1,33 +1,33 @@
 # This is a basic workflow that is manually triggered
 
-name: Cron workflow
-
-# Controls when the action will run. Workflow runs when manually triggered using the UI
-# or API.
-on:
-  schedule:
-    - cron: '0 5 * * mon' # Run every Monday at 5.00
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
-  # This workflow contains a single job called "setUpPython"
-  setuppython:
-    name: Simple cron trigger
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python: ["3.10"]
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-    # Runs a single command using the runners shell
-    - uses: actions/checkout@v3
-    - name: Set-up Python
-      uses: actions/setup-python@v4.3.0
-      with:
-        python-version: ${{ matrix.python }}
-    - name: Get Python Version
-      run: |
-        python --version
-        python -c 'import datetime; print(f"This Workflow start at: {datetime.datetime.now()}")'
+#name: Cron workflow
+#
+## Controls when the action will run. Workflow runs when manually triggered using the UI
+## or API.
+#on:
+#  schedule:
+#    - cron: '0 5 * * mon' # Run every Monday at 5.00
+#
+## A workflow run is made up of one or more jobs that can run sequentially or in parallel
+#jobs:
+#  # This workflow contains a single job called "setUpPython"
+#  setuppython:
+#    name: Simple cron trigger
+#    # The type of runner that the job will run on
+#    runs-on: ubuntu-latest
+#    strategy:
+#      matrix:
+#        python: ["3.10"]
+#
+#    # Steps represent a sequence of tasks that will be executed as part of the job
+#    steps:
+#    # Runs a single command using the runners shell
+#    - uses: actions/checkout@v3
+#    - name: Set-up Python
+#      uses: actions/setup-python@v4.3.0
+#      with:
+#        python-version: ${{ matrix.python }}
+#    - name: Get Python Version
+#      run: |
+#        python --version
+#        python -c 'import datetime; print(f"This Workflow start at: {datetime.datetime.now()}")'
