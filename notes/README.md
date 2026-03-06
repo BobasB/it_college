@@ -17,6 +17,10 @@
 1. [Парадигми в ООП](./05_OOP_paradigms/README.md);
 1. [Віртуальні середовища](./06_python_virtualenvs/README.md);
 
+> AI та Машинне навчання
+
+1. [AI Агенти з Google ADK](./06_python_agents/README.md);
+
 > Тестування та автоматизація
 
 1. [Тестування програм та програмних комплексів](./07_testing/README.md);

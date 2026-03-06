@@ -5,3 +5,19 @@ __pycache__/
 coverage.xml
 temp.csv
 *.npz
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Virtual environments
+.venv/
+venv/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
