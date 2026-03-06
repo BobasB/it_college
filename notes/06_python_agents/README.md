@@ -20,184 +20,153 @@
 
 5. :star: Вкажіть у звіті версію Poetry яка встановлена у вашій системі.
 
----
-### Структура проекту та конфігурація
-1. Проект вже має файл `pyproject.toml` який містить основні налаштування та залежності. Ознайомтесь з його вмістом:
-   ```toml
-   [project]
-   name = "06-python-agents"
-   version = "0.1.0"
-   description = "Google ADK to create agents"
-   requires-python = ">=3.13,<4.0.0"
-   dependencies = [
-       "python-dotenv (>=1.2.2,<2.0.0)",
-       "google-adk (>=1.26.0,<2.0.0)"
-   ]
+6. Перевірте чи Python 3.10+ встановлений:
+   ```bash
+   python --version
+   # або
+   python3 --version
    ```
 
-2. Встановіть всі залежності проекту:
+---
+### Встановлення Google ADK
+1. Перейдіть до папки лабораторної роботи та встановіть залежності:
    ```bash
    cd notes/06_python_agents
    poetry install
    ```
 
-3. :star: Переконайтесь що створився файл `poetry.lock`. Поясніть у звіті для чого потрібен цей файл.
+2. :star: Переконайтесь що створився файл `poetry.lock`. Поясніть у звіті для чого потрібен цей файл.
 
-4. Створіть файл `.env` у папці проекту для зберігання API ключа:
+3. Перевірте що ADK встановлено коректно:
    ```bash
-   echo "GOOGLE_API_KEY=ваш_api_ключ_тут" > .env
+   poetry run adk --version
    ```
 
-5. :star: Переконайтесь що файл `.env` доданий до `.gitignore` у кореневій папці репозиторію.
+4. :star: Вкажіть у звіті версію ADK яка встановлена.
 
----
-### Створення першого AI агента
-1. Створіть файл `simple_agent.py` у папці проекту. Це буде наш перший простий агент який може відповідати на запитання:
-   ```python
-   import os
-   from dotenv import load_dotenv
-   from google import genai
-   from google.genai import types
-
-   # Завантажуємо змінні середовища з файлу .env
-   load_dotenv()
-
-   # Ініціалізуємо клієнта Google AI
-   client = genai.Client(api_key=os.getenv('GOOGLE_API_KEY'))
-
-   def simple_chat(user_prompt: str) -> str:
-       """
-       Проста функція для взаємодії з AI моделлю
-       
-       Args:
-           user_prompt: запитання або команда від користувача
-       
-       Returns:
-           str: відповідь моделі
-       """
-       response = client.models.generate_content(
-           model='gemini-2.0-flash-exp',
-           contents=user_prompt
-       )
-       return response.text
-
-   if __name__ == "__main__":
-       # Тестуємо агента
-       question = "Що таке AI агент? Дай коротку відповідь українською."
-       print(f"Запитання: {question}")
-       answer = simple_chat(question)
-       print(f"\nВідповідь агента:\n{answer}")
-   ```
-
-2. :star: Запустіть агента через Poetry:
+5. Подивіться які команди доступні в ADK:
    ```bash
-   poetry run python simple_agent.py
+   poetry run adk --help
    ```
 
-3. :star: Вставте у звіт результат виконання програми.
-
-4. :star: Змініть запитання у коді та поставте агенту 2-3 власних запитання. Вкажіть у звіті які запитання Ви поставили та які відповіді отримали.
+6. :star: Вкажіть у звіті основні команди ADK (create, run, web).
 
 ---
-### Створення агента з історією діалогу
-1. Простий агент з попереднього завдання не пам'ятає попередні повідомлення. Створимо агента який зберігає історію розмови. Створіть файл `chat_agent.py`:
-   ```python
-   import os
-   from dotenv import load_dotenv
-   from google import genai
-   from google.genai import types
-
-   load_dotenv()
-   client = genai.Client(api_key=os.getenv('GOOGLE_API_KEY'))
-
-   class ChatAgent:
-       """AI агент з підтримкою історії діалогу"""
-       
-       def __init__(self, model: str = 'gemini-2.0-flash-exp'):
-           self.model = model
-           self.history = []
-       
-       def send_message(self, message: str) -> str:
-           """
-           Відправляє повідомлення агенту та отримує відповідь
-           
-           Args:
-               message: повідомлення від користувача
-           
-           Returns:
-               str: відповідь агента
-           """
-           # Додаємо повідомлення користувача до історії
-           self.history.append({
-               'role': 'user',
-               'parts': [{'text': message}]
-           })
-           
-           # Отримуємо відповідь від моделі
-           response = client.models.generate_content(
-               model=self.model,
-               contents=self.history
-           )
-           
-           # Додаємо відповідь до історії
-           self.history.append({
-               'role': 'model',
-               'parts': [{'text': response.text}]
-           })
-           
-           return response.text
-       
-       def get_history_length(self) -> int:
-           """Повертає кількість повідомлень в історії"""
-           return len(self.history)
-       
-       def clear_history(self):
-           """Очищає історію діалогу"""
-           self.history = []
-           print("Історія діалогу очищена.")
-
-   if __name__ == "__main__":
-       # Створюємо агента
-       agent = ChatAgent()
-       
-       # Ведемо діалог
-       print("=== Розмова з AI агентом ===\n")
-       
-       msg1 = "Привіт! Мене звати Студент. Як справи?"
-       print(f"Користувач: {msg1}")
-       response1 = agent.send_message(msg1)
-       print(f"Агент: {response1}\n")
-       
-       msg2 = "А як мене звати?"
-       print(f"Користувач: {msg2}")
-       response2 = agent.send_message(msg2)
-       print(f"Агент: {response2}\n")
-       
-       print(f"Кількість повідомлень в історії: {agent.get_history_length()}")
+### Створення першого проекту з агентом
+1. ADK надає команду `adk create` для автоматичного створення структури проекту. Створимо наш перший проект агента:
+   ```bash
+   poetry run adk create my_first_agent
    ```
 
-2. :star: Запустіть агента та вставте у звіт результат виконання програми.
+2. :star: Перегляньте структуру створеного проекту:
+   ```bash
+   ls -la my_first_agent/
+   ```
+   
+   Ви побачите наступну структуру:
+   ```
+   my_first_agent/
+       agent.py      # основний код агента
+       .env          # API ключі
+       __init__.py   # ініціалізація модуля
+   ```
 
-3. :star: Розширте діалог власними запитаннями (додайте ще 2-3 повідомлення) та перевірте чи агент пам'ятає контекст розмови.
+3. :star: Вкажіть у звіті які файли були створені командою `adk create`.
 
-4. :star: Додайте у клас `ChatAgent` метод `save_history(filename: str)` який зберігає історію діалогу у JSON файл, та метод `load_history(filename: str)` який завантажує історію з файлу. Підказка: використайте модуль `json`.
+4. Відкрийте файл `my_first_agent/agent.py` та перегляньте згенерований код. За замовчуванням ADK створює базовий шаблон агента.
+
+5. Налаштуйте API ключ для агента. Відредагуйте файл `my_first_agent/.env` та додайте ваш ключ:
+   ```bash
+   echo 'GOOGLE_API_KEY="ваш_api_ключ_тут"' > my_first_agent/.env
+   ```
 
 ---
-### Створення агента з інструментами (Tools)
-1. AI агенти можуть використовувати зовнішні інструменти (функції) для виконання специфічних завдань. Створимо агента який вміє виконувати математичні обчислення. Створіть файл `tool_agent.py`:
+### Створення простого агента з інструментом
+1. Тепер оновимо код агента щоб він міг використовувати інструменти (tools). Відкрийте файл `my_first_agent/agent.py` та замініть його вміст на наступний код:
    ```python
-   import os
-   from dotenv import load_dotenv
-   from google import genai
-   from google.genai import types
+   from google.adk.agents.llm_agent import Agent
+   
+   # Визначаємо функцію-інструмент
+   def get_current_time(city: str) -> dict:
+       """Повертає поточний час у вказаному місті."""
+       # Це mock-реалізація для демонстрації
+       import datetime
+       current_time = datetime.datetime.now().strftime("%H:%M:%S")
+       return {
+           "status": "success",
+           "city": city,
+           "time": current_time
+       }
+   
+   # Створюємо агента
+   root_agent = Agent(
+       model='gemini-2.0-flash-exp',
+       name='time_agent',
+       description="Повідомляє поточний час у вказаному місті.",
+       instruction="Ти корисний асистент який повідомляє поточний час у містах. Використовуй функцію 'get_current_time' для цього. Відповідай українською мовою.",
+       tools=[get_current_time],
+   )
+   ```
 
-   load_dotenv()
-   client = genai.Client(api_key=os.getenv('GOOGLE_API_KEY'))
+2. :star: Збережіть файл та поясніть у звіті що робить кожна частина коду:
+   - Що таке `Agent` клас?
+   - Для чого потрібен параметр `tools`?
+   - Що робить функція `get_current_time`?
 
-   # Визначаємо функції-інструменти
-   def calculate_area_rectangle(width: float, height: float) -> float:
+---
+### Запуск агента через командний рядок
+1. Запустіть агента використовуючи команду `adk run`:
+   ```bash
+   poetry run adk run my_first_agent
+   ```
+
+2. :star: У інтерактивному режимі поставте агенту запитання:
+   ```
+   Який зараз час у Києві?
+   ```
+
+3. :star: Зробіть скріншот або скопіюйте діалог з агентом у звіт. Агент повинен викликати функцію `get_current_time` та повернути результат.
+
+4. :star: Поставте агенту ще 2-3 запитання про час у різних містах. Додайте результати у звіт.
+
+5. Вийдіть з агента натиснувши `Ctrl+C` або ввівши `exit`.
+
+---
+### Запуск агента через веб-інтерфейс
+1. ADK надає зручний веб-інтерфейс для тестування агентів. Запустіть веб-сервер:
+   ```bash
+   poetry run adk web --port 8000
+   ```
+
+2. :fire: **ВАЖЛИВО**: Команду `adk web` потрібно запускати з батьківської папки, яка містить вашу папку агента. Тобто з папки `notes/06_python_agents/`.
+
+3. :star: Відкрийте браузер та перейдіть на адресу [http://localhost:8000](http://localhost:8000).
+
+4. :star: Виберіть агента `my_first_agent` у верхньому лівому кутку інтерфейсу.
+
+5. :star: Протестуйте агента через веб-інтерфейс, поставивши йому кілька запитань. Зробіть скріншот веб-інтерфейсу та додайте до звіту.
+
+6. :fire: **ЗАУВАЖТЕ**: ADK Web призначено лише для розробки та налагодження. Не використовуйте його у production середовищі.
+
+---
+### Створення агента з математичними інструментами  
+1. Створимо новий проект агента з математичними можливостями:
+   ```bash
+   poetry run adk create math_agent
+   ```
+
+2. Налаштуйте API ключ:
+   ```bash
+   echo 'GOOGLE_API_KEY="ваш_api_ключ_тут"' > math_agent/.env
+   ```
+
+3. Відкрийте `math_agent/agent.py` та замініть код на наступний:
+   ```python
+   from google.adk.agents.llm_agent import Agent
+   
+   def calculate_rectangle_area(width: float, height: float) -> float:
        """
-       Обчислює площу прямокутника
+       Обчислює площу прямокутника.
        
        Args:
            width: ширина прямокутника
@@ -207,10 +176,10 @@
            float: площа прямокутника
        """
        return width * height
-
-   def calculate_area_circle(radius: float) -> float:
+   
+   def calculate_circle_area(radius: float) -> float:
        """
-       Обчислює площу кола
+       Обчислює площу кола.
        
        Args:
            radius: радіус кола
@@ -220,291 +189,523 @@
        """
        import math
        return math.pi * radius ** 2
-
-   # Реєструємо інструменти для моделі
-   tools = [calculate_area_rectangle, calculate_area_circle]
-
-   def agent_with_tools(user_query: str):
+   
+   def calculate_cube_volume(side: float) -> float:
        """
-       Агент який може використовувати математичні інструменти
+       Обчислює об'єм куба.
        
        Args:
-           user_query: запит користувача
+           side: довжина ребра куба
+       
+       Returns:
+           float: об'єм куба
        """
-       print(f"Запит: {user_query}\n")
-       
-       # Відправляємо запит з доступними інструментами
-       response = client.models.generate_content(
-           model='gemini-2.0-flash-exp',
-           contents=user_query,
-           config=types.GenerateContentConfig(
-               tools=tools,
-               temperature=0.1
-           )
-       )
-       
-       # Виводимо відповідь
-       for part in response.candidates[0].content.parts:
-           if part.text:
-               print(f"Відповідь агента: {part.text}")
-           elif part.function_call:
-               print(f"Виклик функції: {part.function_call.name}")
-               print(f"Аргументи: {dict(part.function_call.args)}")
-
-   if __name__ == "__main__":
-       print("=== AI Агент з інструментами ===\n")
-       
-       # Тестуємо агента
-       agent_with_tools("Обчисли площу прямокутника зі сторонами 5 та 10")
-       print("\n" + "="*50 + "\n")
-       agent_with_tools("Яка площа кола з радіусом 7?")
+       return side ** 3
+   
+   # Створюємо математичного агента
+   root_agent = Agent(
+       model='gemini-2.0-flash-exp',
+       name='math_agent',
+       description="Виконує математичні обчислення геометричних фігур.",
+       instruction="""
+       Ти експертний математичний асистент який допомагає з обчисленнями.
+       У тебе є інструменти для обчислення площі прямокутника, площі кола та об'єму куба.
+       Використовуй ці інструменти коли потрібно виконати розрахунки.
+       Відповідай українською мовою та поясни хід обчислень.
+       """,
+       tools=[calculate_rectangle_area, calculate_circle_area, calculate_cube_volume],
+   )
    ```
 
-2. :star: Запустіть агента та вставте у звіт результат виконання.
-
-3. :star: Додайте власну функцію-інструмент для обчислення об'єму куба (приймає довжину ребра). Зареєструйте її у списку `tools` та протестуйте.
-
-4. :star: Додайте ще один інструмент на ваш вибір (наприклад, конвертер температури з Цельсія у Фаренгейта, або калькулятор ІМТ). Протестуйте роботу агента з новим інструментом.
-
----
-### Створення інтерактивного агента
-1. Створимо агента з яким можна спілкуватись у режимі реального часу через консоль. Створіть файл `interactive_agent.py`:
-   ```python
-   import os
-   from dotenv import load_dotenv
-   from google import genai
-
-   load_dotenv()
-   client = genai.Client(api_key=os.getenv('GOOGLE_API_KEY'))
-
-   class InteractiveAgent:
-       """Інтерактивний AI агент для консольного чату"""
-       
-       def __init__(self, system_instruction: str = None):
-           self.model = 'gemini-2.0-flash-exp'
-           self.history = []
-           self.system_instruction = system_instruction or "Ти - корисний асистент який відповідає українською мовою."
-       
-       def chat(self, message: str) -> str:
-           """Відправляє повідомлення та повертає відповідь"""
-           self.history.append({'role': 'user', 'parts': [{'text': message}]})
-           
-           # Створюємо промпт з системною інструкцією
-           full_contents = [{'role': 'user', 'parts': [{'text': self.system_instruction}]}] + self.history
-           
-           response = client.models.generate_content(
-               model=self.model,
-               contents=full_contents
-           )
-           
-           self.history.append({'role': 'model', 'parts': [{'text': response.text}]})
-           return response.text
-       
-       def run(self):
-           """Запускає інтерактивну консольну сесію"""
-           print("=" * 60)
-           print("Інтерактивний AI Агент")
-           print("Введіть 'вихід' або 'exit' для завершення")
-           print("Введіть 'очистити' для очищення історії")
-           print("=" * 60)
-           print()
-           
-           while True:
-               try:
-                   user_input = input("Ви: ").strip()
-                   
-                   if not user_input:
-                       continue
-                   
-                   if user_input.lower() in ['вихід', 'exit', 'quit']:
-                       print("До побачення!")
-                       break
-                   
-                   if user_input.lower() in ['очистити', 'clear']:
-                       self.history = []
-                       print("Історію очищено.\n")
-                       continue
-                   
-                   # Отримуємо відповідь
-                   response = self.chat(user_input)
-                   print(f"\nАгент: {response}\n")
-                   
-               except KeyboardInterrupt:
-                   print("\n\nРоботу завершено.")
-                   break
-               except Exception as e:
-                   print(f"\nПомилка: {e}\n")
-
-   if __name__ == "__main__":
-       # Створюємо агента з кастомною системною інструкцією
-       system_instruction = """
-       Ти - досвідчений викладач програмування який допомагає студентам вивчати Python.
-       Відповідай українською мовою, будь терплячим та наводь приклади коду коли це доречно.
-       """
-       
-       agent = InteractiveAgent(system_instruction=system_instruction)
-       agent.run()
-   ```
-
-2. :star: Запустіть інтерактивного агента та проведіть з ним діалог на тему Python (поставте мінімум 3-5 запитань). Зробіть скріншот або скопіюйте діалог у звіт.
-
-3. :star: Змініть системну інструкцію (`system_instruction`) щоб агент поводився як експерт у іншій області (наприклад, математики, історії, або музики). Протестуйте нову поведінку агента.
-
----
-### Робота з файлами та контекстом
-1. AI агенти можуть обробляти великі обсяги тексту з файлів. Створимо агента який аналізує вміст файлів. Створіть файл `file_agent.py`:
-   ```python
-   import os
-   from pathlib import Path
-   from dotenv import load_dotenv
-   from google import genai
-
-   load_dotenv()
-   client = genai.Client(api_key=os.getenv('GOOGLE_API_KEY'))
-
-   class FileAnalyzerAgent:
-       """Агент для аналізу текстових файлів"""
-       
-       def __init__(self):
-           self.model = 'gemini-2.0-flash-exp'
-       
-       def read_file(self, filepath: str) -> str:
-           """Читає вміст файлу"""
-           try:
-               with open(filepath, 'r', encoding='utf-8') as f:
-                   return f.read()
-           except Exception as e:
-               return f"Помилка читання файлу: {e}"
-       
-       def analyze_code(self, code: str, task: str) -> str:
-           """
-           Аналізує код згідно з заданим завданням
-           
-           Args:
-               code: вихідний код для аналізу
-               task: що потрібно зробити з кодом
-           
-           Returns:
-               str: результат аналізу
-           """
-           prompt = f"""
-           Завдання: {task}
-           
-           Код для аналізу:
-           ```python
-           {code}
-           ```
-           
-           Дай детальну відповідь українською мовою.
-           """
-           
-           response = client.models.generate_content(
-               model=self.model,
-               contents=prompt
-           )
-           
-           return response.text
-       
-       def analyze_file(self, filepath: str, task: str):
-           """Аналізує файл"""
-           print(f"Аналіз файлу: {filepath}")
-           print(f"Завдання: {task}")
-           print("-" * 60)
-           
-           code = self.read_file(filepath)
-           if code.startswith("Помилка"):
-               print(code)
-               return
-           
-           result = self.analyze_code(code, task)
-           print(result)
-
-   if __name__ == "__main__":
-       agent = FileAnalyzerAgent()
-       
-       # Аналізуємо файл simple_agent.py
-       agent.analyze_file(
-           "simple_agent.py",
-           "Поясни що робить цей код та як він працює. Вкажи основні функції та їх призначення."
-       )
-   ```
-
-2. :star: Запустіть агента та вставте у звіт результат аналізу файлу `simple_agent.py`.
-
-3. :star: Використайте агента для аналізу файлу `chat_agent.py` з завданням "Знайди можливі покращення в цьому коді та запропонуй оптимізації". Вкажіть результат у звіті.
-
-4. :star: Створіть простий Python файл з навмисною помилкою та використайте агента з завданням "Знайди помилки в цьому коді та запропонуй виправлення". Додайте у звіт ваш код з помилкою та відповідь агента.
-
----
-### Додаткові завдання (на вибір)
-1. :star: **Агент-перекладач**: Створіть агента який перекладає текст між мовами (наприклад, українська ↔ англійська). Агент повинен автоматично визначати мову вхідного тексту.
-
-2. :star: **Агент-генератор коду**: Створіть агента який генерує Python код за описом задачі. Наприклад, "створи функцію яка сортує список словників за певним ключем".
-
-3. :star: **Агент з температурою**: Поексперементуйте з параметром `temperature` (0.0 - 2.0) у конфігурації моделі. Створіть агента який генерує креативні історії та порівняйте результати при різних значеннях temperature.
-
-4. :star: **Агент-помічник для лабораторних**: Створіть агента який допомагає виконувати лабораторні роботи - пояснює концепції, наводить приклади, перевіряє код.
-
----
-### Тестування агентів
-1. Створіть файл `test_agents.py` для простого тестування створених агентів:
-   ```python
-   import unittest
-   from simple_agent import simple_chat
-   from chat_agent import ChatAgent
-
-   class TestAgents(unittest.TestCase):
-       """Тести для AI агентів"""
-       
-       def test_simple_agent_response(self):
-           """Перевіряємо що простий агент повертає відповідь"""
-           response = simple_chat("Привіт")
-           self.assertIsNotNone(response)
-           self.assertIsInstance(response, str)
-           self.assertGreater(len(response), 0)
-       
-       def test_chat_agent_history(self):
-           """Перевіряємо що агент зберігає історію"""
-           agent = ChatAgent()
-           self.assertEqual(agent.get_history_length(), 0)
-           
-           agent.send_message("Тест 1")
-           self.assertEqual(agent.get_history_length(), 2)  # user + model
-           
-           agent.send_message("Тест 2")
-           self.assertEqual(agent.get_history_length(), 4)  # +2 повідомлення
-           
-           agent.clear_history()
-           self.assertEqual(agent.get_history_length(), 0)
-       
-       def test_chat_agent_context(self):
-           """Перевіряємо що агент памʼятає контекст"""
-           agent = ChatAgent()
-           agent.send_message("Моє улюблене число - 42")
-           response = agent.send_message("Яке моє улюблене число?")
-           
-           # Перевіряємо що у відповіді є число 42
-           self.assertIn("42", response)
-
-   if __name__ == "__main__":
-       unittest.main()
-   ```
-
-2. :star: Запустіть тести командою:
+4. :star: Запустіть математичного агента:
    ```bash
-   poetry run python -m unittest test_agents.py -v
+   poetry run adk run math_agent
    ```
 
-3. :star: Вставте у звіт результат виконання тестів.
+5. :star: Протестуйте агента з наступними запитаннями та додайте результати у звіт:
+   - "Обчисли площу прямокутника зі сторонами 5 та 10"
+   - "Яка площа кола з радіусом 7?"
+   - "Який об'єм куба з ребром 3?"
 
-4. :star: Додайте ще 2-3 власних тести для перевірки функціональності агентів.
+6. :star: Додайте до агента ще один математичний інструмент на ваш вибір (наприклад, обчислення об'єму циліндра, площі трикутника, або периметру). Протестуйте новий інструмент.
+
+---
+### Створення агента-помічника для студентів
+1. Створимо агента який допомагає студентам з програмуванням:
+   ```bash
+   poetry run adk create student_helper
+   ```
+
+2. Налаштуйте API ключ:
+   ```bash
+   echo 'GOOGLE_API_KEY="ваш_api_ключ_тут"' > student_helper/.env
+   ```
+
+3. Відкрийте `student_helper/agent.py` та створіть агента з кастомною інструкцією:
+   ```python
+   from google.adk.agents.llm_agent import Agent
+   
+   def explain_concept(concept: str, level: str = "beginner") -> dict:
+       """
+       Пояснює концепцію програмування.
+       
+       Args:
+           concept: назва концепції для пояснення
+           level: рівень складності (beginner, intermediate, advanced)
+       
+       Returns:
+           dict: пояснення та приклади
+       """
+       explanations = {
+           "beginner": f"Базове пояснення концепції {concept}",
+           "intermediate": f"Поглиблене пояснення концепції {concept}",
+           "advanced": f"Експертне пояснення концепції {concept}"
+       }
+       return {
+           "concept": concept,
+           "level": level,
+           "explanation": explanations.get(level, "Невідомий рівень")
+       }
+   
+   def check_syntax(code: str, language: str = "python") -> dict:
+       """
+       Перевіряє синтаксис коду (базова перевірка).
+       
+       Args:
+           code: код для перевірки
+           language: мова програмування
+       
+       Returns:
+           dict: результат перевірки
+       """
+       # Проста перевірка для демонстрації
+       if not code.strip():
+           return {"valid": False, "message": "Код порожній"}
+       return {"valid": True, "message": "Синтаксис виглядає коректно", "language": language}
+   
+   root_agent = Agent(
+       model='gemini-2.0-flash-exp',
+       name='student_helper',
+       description="Помічник для студентів які вивчають програмування.",
+       instruction="""
+       Ти досвідчений викладач програмування який допомагає студентам.
+       
+       Твої обов'язки:
+       - Пояснювати складні концепції простими словами
+       - Наводити приклади коду
+       - Перевіряти синтаксис коду
+       - Давати поради щодо best practices
+       - Бути терплячим та підтримуючим
+       
+       Завжди відповідай українською мовою.
+       Коли даєш приклади коду, форматуй їх у markdown блоки.
+       """,
+       tools=[explain_concept, check_syntax],
+   )
+   ```
+
+4. :star: Запустіть агента та поставте йому запитання про Python:
+   ```bash
+   poetry run adk run student_helper
+   ```
+
+5. :star: Протестуйте агента з наступними запитаннями:
+   - "Поясни що таке декоратори в Python"
+   - "Як працює list comprehension?"
+   - "Перевір синтаксис: print('Hello World')"
+
+6. :star: Додайте результати діалогу у звіт.
+
+---
+### Робота з конфігурацією агента
+1. Параметри моделі можна налаштовувати для різної поведінки агента. Створимо агента з різними налаштуваннями:
+   ```bash
+   poetry run adk create creative_writer
+   ```
+
+2. Налаштуйте `.env` файл як у попередніх прикладах.
+
+3. Відкрийте `creative_writer/agent.py` та створіть агента з налаштуваннями для креативного письма:
+   ```python
+   from google.adk.agents.llm_agent import Agent
+   from google.genai.types import GenerateContentConfig
+   
+   def generate_story_prompt(theme: str, characters: int = 2) -> str:
+       """
+       Генерує промпт для історії.
+       
+       Args:
+           theme: тема історії
+           characters: кількість персонажів
+       
+       Returns:
+           str: промпт для генерації історії
+       """
+       return f"Створи цікаву історію на тему '{theme}' з {characters} персонажами."
+   
+   root_agent = Agent(
+       model='gemini-2.0-flash-exp',
+       name='creative_writer',
+       description="Креативний письменник історій.",
+       instruction="""
+       Ти талановитий письменник який створює захоплюючі історії.
+       Твої історії мають бути:
+       - Цікавими та захоплюючими
+       - З несподіваними поворотами сюжету
+       - З яскравими персонажами
+       - Написаними українською мовою
+       
+       Використовуй багатий словниковий запас та літературні прийоми.
+       """,
+       tools=[generate_story_prompt],
+       # Налаштування для більш креативних відповідей
+       config=GenerateContentConfig(
+           temperature=1.5,  # Висока температура для креативності
+           top_k=40,
+           top_p=0.95,
+       )
+   )
+   ```
+
+4. :star: Запустіть агента та попросіть його написати коротку історію:
+   ```bash
+   poetry run adk run creative_writer
+   ```
+
+5. :star: Протестуйте різні промпти:
+   - "Напиши коротку історію про подорож у космосі"
+   - "Створи казку про дружбу між роботом та людиною"
+
+6. :star: Поясніть у звіті що означають параметри `temperature`, `top_k`, та `top_p`. Як вони впливають на відповіді моделі?
+
+---
+### Пояснення параметрів моделі
+1. **temperature** (0.0 - 2.0):
+   - 0.0-0.3: Детерміністичні, точні відповіді (для фактів, розрахунків)
+   - 0.4-0.7: Збалансовані відповіді (універсальне використання)
+   - 0.8-1.5: Креативні відповіді (для історій, генерації ідей)
+   - 1.6-2.0: Дуже креативні, непередбачувані відповіді
+
+2. **top_k** (1-40):
+   - Обмежує кількість найімовірніших токенів для вибору
+   - Менше значення = більш фокусовані відповіді
+   - Більше значення = більш різноманітні відповіді
+
+3. **top_p** (0.0-1.0):
+   - Кумулятивна ймовірність вибору токенів
+   - 0.9-0.95: збалансований вибір
+   - Нижче 0.9: більш консервативні відповіді
+   - Вище 0.95: більш різноманітні відповіді
+
+4. :star: Створіть 3 агенти з різними налаштуваннями:
+   - Агент-експерт (temperature=0.1)
+   - Агент-асистент (temperature=0.7)
+   - Агент-письменник (temperature=1.3)
+   
+   Поставте їм однакове запитання та порівняйте відповіді. Додайте результати у звіт.
+
+---
+### Створення агента з пам'яттю (збереження контексту)
+1. ADK автоматично зберігає контекст розмови під час сесії. Створимо агента який використовує цю можливість:
+   ```bash
+   poetry run adk create conversation_agent
+   ```
+
+2. Налаштуйте `.env` файл.
+
+3. Створіть простого розмовного агента у `conversation_agent/agent.py`:
+   ```python
+   from google.adk.agents.llm_agent import Agent
+   
+   def save_user_preference(preference_type: str, value: str) -> dict:
+       """
+       Зберігає вподобання користувача.
+       
+       Args:
+           preference_type: тип вподобання (улюблений_колір, хобі, тощо)
+           value: значення вподобання
+       
+       Returns:
+           dict: підтвердження збереження
+       """
+       return {
+           "status": "saved",
+           "preference_type": preference_type,
+           "value": value,
+           "message": f"Збережено: {preference_type} = {value}"
+       }
+   
+   def recall_preference(preference_type: str) -> dict:
+       """
+       Згадує вподобання користувача.
+       
+       Args:
+           preference_type: тип вподобання для пошуку
+       
+       Returns:
+           dict: збережене вподобання або повідомлення про відсутність
+       """
+       # Примітка: історія зберігається автоматично в ADK
+       return {"message": "Будь ласка, нагадай мені що саме ти хочеш щоб я згадав"}
+   
+   root_agent = Agent(
+       model='gemini-2.0-flash-exp',
+       name='conversation_agent',
+       description="Розмовний агент який памʼятає користувача.",
+       instruction="""
+       Ти дружелюбний асистент який веде розмову з користувачем.
+       
+       Важливо:
+       - Памʼятай що користувач каже про себе
+       - Використовуй цю інформацію у подальшій розмові
+       - Стався уважно до деталей
+       - Будь ввічливим та цікавим співрозмовником
+       
+       Відповідай українською мовою.
+       Коли користувач згадує свої вподобання, використовуй інструмент save_user_preference.
+       """,
+       tools=[save_user_preference, recall_preference],
+   )
+   ```
+
+4. :star: Запустіть агента та проведіть розмову:
+   ```bash
+   poetry run adk run conversation_agent
+   ```
+
+5. :star: Проведіть діалог де ви:
+   - Представитеся агенту (назвіть своє імʼя)
+   - Розкажіть про своє хобі
+   - Згадайте улюблений колір
+   - Потім запитайте "Як мене звати?" та "Яке моє хобі?"
+
+6. :star: Агент повинен памʼятати контекст розмови. Додайте скріншот або текст діалогу у звіт.
+
+---
+### Додаткові практичні завдання
+1. :star: **Агент-перекладач**: Створіть агента який перекладає текст між мовами. Використайте `adk create translator_agent` та додайте інструменти для перекладу.
+
+2. :star: **Агент з домашніми завданнями**: Створіть агента який допомагає студентам:
+   ```bash
+   poetry run adk create homework_helper
+   ```
+   
+   Додайте інструменти для:
+   - Пояснення математичних формул
+   - Перевірки граматики тексту
+   - Генерації прикладів
+
+3. :star: **Агент для роботи з даними**: Створіть агента з інструментами для:
+   - Обчислення статистики (середнє, медіана)
+   - Сортування списків
+   - Фільтрації даних
+
+4. :star: **Експеримент з температурою**: Створіть два агенти з різною температурою (0.2 та 1.8) та порівняйте їх відповіді на однакові запитання. Додайте висновки у звіт.
+
+---
+### Налагодження та тестування агентів
+1. ADK надає зручні інструменти для налагодження. Використовуйте verbose режим для детальної інформації:
+   ```bash
+   poetry run adk run my_first_agent --verbose
+   ```
+
+2. :star: Запустіть агента у verbose режимі та помітьте що додаткова інформація виводиться. Вкажіть у звіті яку додаткову інформацію ви побачили.
+
+3. Для логування можна використовувати вбудовані можливості Python. Додайте логування до вашого агента:
+   ```python
+   import logging
+   from google.adk.agents.llm_agent import Agent
+   
+   # Налаштування логування
+   logging.basicConfig(level=logging.INFO)
+   logger = logging.getLogger(__name__)
+   
+   def my_tool(param: str) -> str:
+       """Приклад інструменту з логуванням"""
+       logger.info(f"Tool called with param: {param}")
+       return f"Processed: {param}"
+   
+   root_agent = Agent(
+       model='gemini-2.0-flash-exp',
+       name='logging_agent',
+       description="Агент з логуванням.",
+       instruction="Використовуй інструменти та логуй всі дії.",
+       tools=[my_tool],
+   )
+   ```
+
+4. :star: Додайте логування до одного з ваших агентів та протестуйте. Вставте приклад логів у звіт.
+
+---
+### Робота зі структурою проекту
+1. Рекомендована структура проекту з агентами:
+   ```
+   notes/06_python_agents/
+   ├── my_first_agent/
+   │   ├── agent.py
+   │   ├── .env
+   │   └── __init__.py
+   ├── math_agent/
+   │   ├── agent.py
+   │   ├── .env
+   │   └── __init__.py
+   ├── student_helper/
+   │   ├── agent.py
+   │   ├── .env
+   │   └── __init__.py
+   ├── tools/
+   │   ├── __init__.py
+   │   └── common_tools.py
+   ├── pyproject.toml
+   ├── poetry.lock
+   └── README.md
+   ```
+
+2. :star: Створіть мінімум 3 різних агенти у окремих папках. Додайте скріншот структури папок у звіт.
+
+3. Для організації спільних інструментів створіть папку `tools/`:
+   ```bash
+   mkdir tools
+   touch tools/__init__.py
+   touch tools/common_tools.py
+   ```
+
+4. У файлі `tools/common_tools.py` можна зберігати спільні інструменти:
+   ```python
+   """Спільні інструменти для всіх агентів"""
+   
+   def format_text(text: str, style: str = "uppercase") -> str:
+       """
+       Форматує текст за вказаним стилем.
+       
+       Args:
+           text: текст для форматування
+           style: стиль (uppercase, lowercase, title)
+       
+       Returns:
+           str: відформатований текст
+       """
+       if style == "uppercase":
+           return text.upper()
+       elif style == "lowercase":
+           return text.lower()
+       elif style == "title":
+           return text.title()
+       return text
+   
+   def count_words(text: str) -> dict:
+       """
+       Підраховує кількість слів у тексті.
+       
+       Args:
+           text: текст для аналізу
+       
+       Returns:
+           dict: статистика по тексту
+       """
+       words = text.split()
+       return {
+           "total_words": len(words),
+           "total_chars": len(text),
+           "unique_words": len(set(words))
+       }
+   ```
+
+5. :star: Створіть файл зі спільними інструментами та використайте їх у декількох агентах. Імпортуйте інструменти так:
+   ```python
+   from tools.common_tools import format_text, count_words
+   ```
+
+---
+### Поради щодо створення ефективних агентів
+1. **Чіткі інструкції**:
+   - Пишіть конкретні, детальні системні інструкції
+   - Вказуйте формат відповіді, якщо потрібно
+   - Визначайте мову відповіді
+
+2. **Якісні інструменти (tools)**:
+   - Пишіть докладні docstrings
+   - Описуйте всі параметри
+   - Обробляйте помилки в інструментах
+   - Повертайте структуровані дані (dict, list)
+
+3. **Валідація вводу**:
+   ```python
+   def safe_divide(a: float, b: float) -> dict:
+       """Ділить два числа з перевіркою на нуль."""
+       if b == 0:
+           return {"error": "Ділення на нуль неможливе", "result": None}
+       return {"result": a / b, "error": None}
+   ```
+
+4. :star: Напишіть власного агента дотримуючись цих порад. Додайте код агента та опис чому ви обрали саме такі інструкції та інструменти.
+
+---
+### Розширене завдання: Агент з збереженням стану
+1. Створіть агента який зберігає інформацію між сесіями:
+   ```bash
+   poetry run adk create stateful_agent
+   ```
+
+2. У файлі `stateful_agent/agent.py`:
+   ```python
+   import json
+   from pathlib import Path
+   from google.adk.agents.llm_agent import Agent
+   
+   STATE_FILE = Path("stateful_agent/user_state.json")
+   
+   def load_state() -> dict:
+       """Завантажує стан з файлу"""
+       if STATE_FILE.exists():
+           with open(STATE_FILE, 'r', encoding='utf-8') as f:
+               return json.load(f)
+       return {}
+   
+   def save_state(data: dict) -> dict:
+       """Зберігає стан у файл"""
+       with open(STATE_FILE, 'w', encoding='utf-8') as f:
+           json.dump(data, f, indent=2, ensure_ascii=False)
+       return {"status": "saved", "data": data}
+   
+   def remember_fact(key: str, value: str) -> dict:
+       """Запамʼятовує факт про користувача"""
+       state = load_state()
+       state[key] = value
+       return save_state(state)
+   
+   def recall_fact(key: str) -> dict:
+       """Згадує факт про користувача"""
+       state = load_state()
+       value = state.get(key)
+       if value:
+           return {"key": key, "value": value, "found": True}
+       return {"key": key, "value": None, "found": False}
+   
+   root_agent = Agent(
+       model='gemini-2.0-flash-exp',
+       name='stateful_agent',
+       description="Агент який памʼятає користувача між сесіями.",
+       instruction="""
+       Ти персональний асистент який памʼятає інформацію про користувача.
+       
+       Коли користувач розповідає щось про себе, використовуй remember_fact.
+       Коли потрібно згадати щось, використовуй recall_fact.
+       
+       Будь уважним та корисним. Відповідай українською мовою.
+       """,
+       tools=[remember_fact, recall_fact],
+   )
+   ```
+
+3. :star: Запустіть агента, розкажіть йому щось про себе, вийдіть та запустіть знову. Перевірте чи агент памʼятає попередню інформацію. Додайте скріншоти обох сесій у звіт.
 
 ---
 ### Робота з Poetry - додаткові можливості
 1. Poetry дозволяє легко додавати нові залежності до проекту:
    ```bash
    poetry add requests  # додати нову бібліотеку
-   poetry remove requests  # видалити бібліотеку
+   poetry remove requests  # видалити бібілотеку
    poetry show  # показати всі встановлені пакети
    poetry show --tree  # показати дерево залежностей
    ```
@@ -519,11 +720,20 @@
 
 4. :star: Вкажіть у звіті шлях до віртуального середовища створеного Poetry.
 
+5. Для оновлення залежностей використовуйте:
+   ```bash
+   poetry update  # оновити всі залежності
+   poetry update google-adk  # оновити конкретний пакет
+   ```
+
+6. :star: Спробуйте оновити залежності та вкажіть у звіті чи були оновлення.
+
 ---
 ### Здача роботи
-- :star: Переконайтесь що всі створені Python файли знаходяться у папці `notes/06_python_agents/`;
-- :star: Переконайтесь що файл `.env` **НЕ** доданий до репозиторію (має бути у `.gitignore`);
+- :star: Переконайтесь що всі створені агенти знаходяться у окремих папках всередині `notes/06_python_agents/`;
+- :star: Переконайтесь що файли `.env` у кожній папці агента **НЕ** додані до репозиторію (мають бути у `.gitignore`);
 - :star: Переконайтесь що файли `poetry.lock` та `pyproject.toml` додані до репозиторію;
+- :star: Переконайтесь що всі `agent.py` файли мають коректний код з `root_agent`;
 - :star: Коли робота завершена та всі файли завантажено до репозиторію, перейдіть у веб-браузер та скопіюйте URL посилання на вашу роботу;
 - :star: Відправте URL посилання як відповідь на запитання до завдання у Google Classroom;
 - :star: Після того як викладач перевірить роботу, ви отримаєте оцінку у Google Classroom;
@@ -531,8 +741,9 @@
 ---
 ### Корисні посилання
 - [Google AI Studio](https://aistudio.google.com/) - платформа для роботи з моделями Google
-- [Google ADK Documentation](https://ai.google.dev/gemini-api/docs) - документація Google AI Development Kit
+- [Google ADK Documentation](https://google.github.io/adk-docs/) - офіційна документація Google ADK
+- [Google ADK Python Quickstart](https://google.github.io/adk-docs/get-started/python/) - швидкий старт для Python
 - [Poetry Documentation](https://python-poetry.org/docs/) - документація Poetry
-- [Python dotenv](https://pypi.org/project/python-dotenv/) - робота зі змінними середовища
+- [Gemini API](https://ai.google.dev/gemini-api/docs) - документація Gemini API
 
 ---
