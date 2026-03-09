@@ -21,3 +21,8 @@ venv/
 *.swp
 *.swo
 *~
+
+# Google ADK
+my_first_agent/
+.adk/
+EXAMPLE_AGENT_STRUCTURE.md
