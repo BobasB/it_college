@@ -83,7 +83,15 @@
    
    # Визначаємо функцію-інструмент
    def get_current_time(city: str) -> dict:
-       """Повертає поточний час у вказаному місті."""
+       """
+       Повертає поточний час у вказаному місті.
+       
+       Args:
+           city: назва міста
+       
+       Returns:
+           dict: інформація про час у вказаному місті
+       """
        # Це mock-реалізація для демонстрації
        import datetime
        current_time = datetime.datetime.now().strftime("%H:%M:%S")
@@ -95,10 +103,10 @@
    
    # Створюємо агента
    root_agent = Agent(
-       model='gemini-2.0-flash-exp',
+       model='gemini-2.5-flash',
        name='time_agent',
        description="Повідомляє поточний час у вказаному місті.",
-       instruction="Ти корисний асистент, який повідомляє поточний час у містах. Використовуй функцію 'get_current_time' для цього. Відповідай українською мовою та використовуй подачу дати/часу у форматі dd.mm.yyyy HH:MM:SS.",
+       instruction="Ти корисний асистент, який повідомляє поточний час у містах. Використовуй функцію 'get_current_time' для цього. Відповідай українською мовою та використовуй подачу дати/часу у форматі HH:MM:SS.",
        tools=[get_current_time],
    )
    ```
@@ -133,7 +141,7 @@
    poetry run adk web --port 8000
    ```
 
-2. :fire: **ВАЖЛИВО**: Команду `adk web` потрібно запускати з батьківської папки, яка містить вашу папку агента. Тобто кореневої папки де міститься файл `pyproject.toml`.
+2. :fire: **ВАЖЛИВО**: Команду `adk web` потрібно запускати з батьківської папки, яка містить папку вашого агента, тобто кореневої папки де міститься файл `pyproject.toml`.
 
 3. :star: Відкрийте браузер та перейдіть на адресу [http://localhost:8000](http://localhost:8000).
 
@@ -199,7 +207,7 @@
    
    # Створюємо математичного агента
    root_agent = Agent(
-       model='gemini-2.0-flash-exp',
+       model='gemini-2.5-flash',
        name='math_agent',
        description="Виконує математичні обчислення геометричних фігур.",
        instruction="""
@@ -214,7 +222,7 @@
 
 4. :star: Запустіть математичного агента:
    ```bash
-   poetry run adk run math_agent
+   poetry run adk web --port 8000
    ```
 
 5. :star: Протестуйте агента з наступними запитаннями та додайте результати у звіт:
@@ -279,7 +287,7 @@
        return {"valid": True, "message": "Синтаксис виглядає коректно", "language": language}
    
    root_agent = Agent(
-       model='gemini-2.0-flash-exp',
+       model='gemini-2.5-flash',
        name='student_helper',
        description="Помічник для студентів які вивчають програмування.",
        instruction="""
@@ -339,7 +347,7 @@
        return f"Створи цікаву історію на тему '{theme}' з {characters} персонажами."
    
    root_agent = Agent(
-       model='gemini-2.0-flash-exp',
+       model='gemini-2.5-flash',
        name='creative_writer',
        description="Креативний письменник історій.",
        instruction="""
@@ -442,7 +450,7 @@
        return {"message": "Будь ласка, нагадай мені що саме ти хочеш щоб я згадав"}
    
    root_agent = Agent(
-       model='gemini-2.0-flash-exp',
+       model='gemini-2.5-flash',
        name='conversation_agent',
        description="Розмовний агент який памʼятає користувача.",
        instruction="""
@@ -492,17 +500,17 @@
    logging.basicConfig(level=logging.INFO)
    logger = logging.getLogger(__name__)
    
-   def my_tool(param: str) -> str:
+   def logging_tool(param: str) -> str:
        """Приклад інструменту з логуванням"""
-       logger.info(f"Tool called with param: {param}")
-       return f"Processed: {param}"
+       logger.info(f"Виклик інструменту logging_tool з параметром: {param}")
+       return {"result": "success", "processed_param": param}
    
    root_agent = Agent(
-       model='gemini-2.0-flash-exp',
+       model='gemini-2.5-flash',
        name='logging_agent',
        description="Агент з логуванням.",
        instruction="Використовуй інструменти та логуй всі дії.",
-       tools=[my_tool],
+       tools=[logging_tool],
    )
    ```
 
@@ -655,7 +663,7 @@
        return {"key": key, "value": None, "found": False}
    
    root_agent = Agent(
-       model='gemini-2.0-flash-exp',
+       model='gemini-2.5-flash',
        name='stateful_agent',
        description="Агент який памʼятає користувача між сесіями.",
        instruction="""
@@ -671,6 +679,8 @@
    ```
 
 3. :star: Запустіть агента, розкажіть йому щось про себе, вийдіть та запустіть знову. Перевірте чи агент памʼятає попередню інформацію. Додайте скріншоти обох сесій у звіт.
+
+
 
 ---
 ### Здача роботи
