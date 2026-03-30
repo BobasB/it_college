@@ -257,9 +257,10 @@
            "advanced": f"Експертне пояснення концепції {concept}"
        }
        return {
-           "concept": concept,
-           "level": level,
-           "explanation": explanations.get(level, "Невідомий рівень")
+            "status": "success",
+            "concept": concept,
+            "level": level,
+            "explanation": explanations.get(level, "Невідомий рівень")
        }
    
    def check_syntax(code: str, language: str = "python") -> dict:
@@ -275,8 +276,8 @@
        """
        # Проста перевірка для демонстрації
        if not code.strip():
-           return {"valid": False, "message": "Код порожній"}
-       return {"valid": True, "message": "Синтаксис виглядає коректно", "language": language}
+           return {"status": "error", "message": "Код порожній"}
+       return {"status": "success", "message": "Синтаксис виглядає коректно", "language": language}
    
    root_agent = Agent(
        model='gemini-2.5-flash',
@@ -406,63 +407,76 @@
    ```
 
 2. Створіть простого розмовного агента у `conversation_agent/agent.py`:
-   ```python
-   from google.adk.agents.llm_agent import Agent
-   
-   def save_user_preference(preference_type: str, value: str) -> dict:
-       """
-       Зберігає вподобання користувача.
-       
-       Args:
-           preference_type: тип вподобання (улюблений_колір, хобі, тощо)
-           value: значення вподобання
-       
-       Returns:
-           dict: підтвердження збереження
-       """
-       return {
-           "status": "saved",
-           "preference_type": preference_type,
-           "value": value,
-           "message": f"Збережено: {preference_type} = {value}"
-       }
-   
-   def recall_preference(preference_type: str) -> dict:
-       """
-       Згадує вподобання користувача.
-       
-       Args:
-           preference_type: тип вподобання для пошуку
-       
-       Returns:
-           dict: збережене вподобання або повідомлення про відсутність
-       """
-       # Примітка: історія зберігається автоматично в ADK
-       return {"message": "Будь ласка, нагадай мені що саме ти хочеш щоб я згадав"}
-   
-   root_agent = Agent(
-       model='gemini-2.5-flash',
-       name='conversation_agent',
-       description="Розмовний агент який памʼятає користувача.",
-       instruction="""
-       Ти дружелюбний асистент який веде розмову з користувачем.
-       
-       Важливо:
-       - Памʼятай що користувач каже про себе
-       - Використовуй цю інформацію у подальшій розмові
-       - Стався уважно до деталей
-       - Будь ввічливим та цікавим співрозмовником
-       
-       Відповідай українською мовою.
-       Коли користувач згадує свої вподобання, використовуй інструмент save_user_preference.
-       """,
-       tools=[save_user_preference, recall_preference],
-   )
-   ```
+    ```python
+    from google.adk.agents.llm_agent import Agent
+    from google.adk.tools.tool_context import ToolContext
+
+    def save_user_preference(tool_context: ToolContext, preference_type: str, value: str) -> dict:
+        """
+        Зберігає вподобання користувача.
+
+        Args:
+            preference_type: тип вподобання (улюблений_колір, хобі, тощо)
+            value: значення вподобання
+
+        Returns:
+            dict: підтвердження збереження
+        """
+        existing_state = tool_context.state.get(preference_type, [])
+        tool_context.state[preference_type] = existing_state + [value]
+        print(f"[Added to {preference_type}] {value}")
+        return {
+            "status": "success",
+            "message": f"Збережено: {preference_type} = {value}"
+        }
+
+    def recall_preference(tool_context: ToolContext, preference_type: str) -> dict:
+        """
+        Згадує вподобання користувача.
+
+        Args:
+            preference_type: тип вподобання для пошуку
+
+        Returns:
+            dict: збережене вподобання або повідомлення про відсутність
+        """
+        # Примітка: історія зберігається автоматично в ADK
+        preferences = tool_context.state.get(preference_type, [])
+        if preferences:
+            return {
+                "status": "success",
+                "message": f"Згадано: {preference_type} = {', '.join(preferences)}"
+            }
+        else:
+            return {
+                "status": "error",
+                "message": f"Не знайдено вподобань типу: {preference_type}"
+            }
+
+    root_agent = Agent(
+        model='gemini-2.5-flash',
+        name='conversation_agent',
+        description="Розмовний агент який памʼятає користувача.",
+        instruction="""
+        Ти дружелюбний асистент який веде розмову з користувачем.
+
+        Важливо:
+        - Памʼятай що користувач розповідає про себе та зберігай цю інформацію як вподобання за допомогою інструменту   save_user_preference
+        - Використовуй цю інформацію у подальшій розмові використовуючи інструмент recall_preference
+        - Стався уважно до деталей, які користувач розповідає про себе, це допоможе тобі краще його розуміти та     підтримувати цікаву розмову
+        - Будь ввічливим та цікавим співрозмовником
+        - Звертайся до користувача по імені, якщо він його назве, та намагайся запамʼятати його інтереси та вподобання для  подальшого використання у розмові
+
+        Відповідай українською мовою.
+        """,
+        tools=[save_user_preference, recall_preference],
+    )
+
+    ```
 
 4. :star: Запустіть агента та проведіть розмову:
    ```bash
-   poetry run adk run conversation_agent
+   poetry run adk web --port 8000
    ```
 
 5. :star: Проведіть діалог де ви:
