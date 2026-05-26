@@ -37,6 +37,27 @@
 > - Демонстрація роботи агента (скріншот або лог діалогу у звіті)
 
 ---
+> [!NOTE]
+> Демонстраційний варіант 0 — Агент служби доставки *(зразок виконання)*
+> Цей варіант є готовим прикладом того, як має бути виконане завдання. Повна реалізація знаходиться у папці [`demo/`](demo/).
+
+### OOP-завдання
+Реалізуйте ієрархію класів для служби доставки посилок:
+
+1. Абстрактний клас `Package` з атрибутами `weight_kg: float`, `distance_km: float` та абстрактним методом `shipping_cost() -> float`.
+2. Класи `StandardPackage` та `ExpressPackage` що успадковують `Package` та реалізують `shipping_cost()`:
+   - `StandardPackage` має приватний атрибут `__rate_per_kg = 5.0` (інкапсуляція), властивість-геттер `rate`, формула: `weight_kg * rate + distance_km * 0.2`
+   - `ExpressPackage` має приватний `__rate_per_kg = 10.0` та класовий атрибут `SURCHARGE = 50.0`, формула: `weight_kg * rate + distance_km * 0.5 + SURCHARGE`
+3. Клас `DeliveryService` що:
+   - зберігає замовлення у приватному списку `__orders: list[Package]` (інкапсуляція)
+   - методи `add_order(package)`, `total_revenue() -> float`, `order_count() -> int`
+
+### AI-агент
+- **Інструмент (tool):** функція `get_delivery_cost(package_type: str, weight_kg: float, distance_km: float) -> dict` — **всередині функції** створює об'єкт `DeliveryService`, на основі `package_type` створює `StandardPackage` або `ExpressPackage`, додає через `add_order()`, отримує вартість через `shipping_cost()` та повертає `{"package_type": ..., "weight_kg": ..., "distance_km": ..., "rate_per_kg_uah": ..., "cost_uah": ..., "description": ...}`.
+- **Промпт агента:** агент є помічником служби доставки "Nova Post". Він розраховує вартість доставки посилок двох типів (стандартна/експрес) та пояснює з чого складається ціна. Відповідає **українською мовою**.
+- **Демонстрація:** поставте агенту 3 запитання з різними типами посилок, вагами та відстанями.
+
+---
 
 ## Варіант 1 — Агент прогнозу погоди
 
@@ -147,7 +168,6 @@
 3. Клас `Library` що:
    - зберігає елементи у приватному списку `__catalog` (інкапсуляція)
    - методи `add(item)`, `find(title: str) -> LibraryItem | None` та `list_all()` (поліморфізм через `get_info()`)
-4. Продемонструйте роботу класу: наповніть бібліотеку кількома книгами та журналами, виведіть каталог.
 
 ### AI-агент
 - **Інструмент (tool):** функція `search_book(title: str) -> dict` — **всередині функції** створює об'єкт `Library`, наповнює його заздалегідь визначеними об'єктами `Book` та `Magazine`, викликає `find(title)`, отримує дані через `get_info()` та повертає їх. Якщо не знайдено — повертає `{"found": False}`.
@@ -169,7 +189,6 @@
    - зберігає список вправ (`__exercises` — приватний, інкапсуляція)
    - методи `add(exercise)` та `total_calories() -> float` (поліморфізм через `calories_burned()`)
    - метод `summary() -> dict` — повертає `{"exercises": [...], "total_calories": ...}`
-4. Продемонструйте роботу: створіть тренування з кількох вправ, виведіть `summary()`.
 
 ### AI-агент
 - **Інструмент (tool):** функція `calculate_workout(exercises: list) -> dict` — **всередині функції** створює об'єкт `Workout`, для кожного елементу зі списку (словник з полями `type`, `name`, `duration_min` та `intensity`/`weight_kg`) створює відповідний об'єкт `CardioExercise` або `StrengthExercise` і додає через `add()`, потім викликає `summary()` та повертає результат.
@@ -190,7 +209,6 @@
 3. Клас `Schedule` що:
    - зберігає маршрути у приватному словнику `__routes: dict[str, Transport]` (інкапсуляція)
    - методи `add_route(transport)`, `find_route(route_number: str) -> Transport | None` та `list_routes()` (поліморфізм через `get_schedule()`)
-4. Продемонструйте роботу: наповніть розклад кількома маршрутами, виведіть список.
 
 ### AI-агент
 - **Інструмент (tool):** функція `get_transport_schedule(route_number: str) -> dict` — **всередині функції** створює об'єкт `Schedule`, наповнює його заздалегідь визначеними маршрутами `Bus` та `Train`, викликає `find_route(route_number)`, отримує дані через `get_schedule()` та повертає їх. Якщо маршрут не знайдено — повертає `{"found": False}`.
@@ -211,7 +229,6 @@
 3. Клас `CookBook` що:
    - зберігає рецепти у приватному словнику `__recipes: dict[str, Dish]` (інкапсуляція)
    - методи `add(dish)`, `find(name: str) -> Dish | None` та `list_all()` (поліморфізм через `get_nutrition()`)
-4. Продемонструйте роботу: наповніть кулінарну книгу кількома стравами, виведіть список.
 
 ### AI-агент
 - **Інструмент (tool):** функція `get_recipe_info(dish_name: str) -> dict` — **всередині функції** створює об'єкт `CookBook`, наповнює його заздалегідь визначеними стравами `VeganDish` та `MeatDish`, викликає `find(dish_name)`, отримує харчову цінність через `get_nutrition()` та повертає її разом із `cooking_time_min`. Якщо страва не знайдена — повертає `{"found": False}`.
@@ -232,7 +249,6 @@
 3. Клас `ParkingLot` що:
    - зберігає припарковані авто у приватному словнику `__parked: dict[str, tuple[Vehicle, float]]` де значення — `(vehicle, entry_hour)` (інкапсуляція)
    - методи `park(vehicle, entry_hour: float)`, `leave(plate: str, exit_hour: float) -> dict` — розраховує суму через `parking_rate()` і час стоянки (поліморфізм), та `list_parked()` — виводить список авто
-4. Продемонструйте роботу: запаркуйте кілька авто, виведіть список, виконайте `leave()` для одного.
 
 ### AI-агент
 - **Інструмент (tool):** функція `calculate_parking_cost(vehicle_type: str, hours: float, weight_tons: float = 0) -> dict` — **всередині функції** створює об'єкт `Car` або `Truck` (залежно від `vehicle_type`) з тимчасовим номером, викликає `parking_rate()` щоб отримати ставку, розраховує `cost = parking_rate() * hours` та повертає `{"vehicle_type": ..., "hours": ..., "rate_per_hour": ..., "total_cost": ...}`.
@@ -240,4 +256,3 @@
 - **Демонстрація:** поставте агенту 3 запитання з різними типами авто та часом стоянки.
 
 ---
-
