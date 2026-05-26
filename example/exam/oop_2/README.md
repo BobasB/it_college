@@ -52,7 +52,7 @@
 >    - методи `add_order(package)`, `total_revenue() -> float`, `order_count() -> int`
 > 
 > ### AI-агент
-> - **Інструмент (tool):** функція `get_delivery_cost(package_type: str, weight_kg: float, > distance_km: float) -> dict` — **всередині функції** створює об'єкт `DeliveryService`, на > основі `package_type` створює `StandardPackage` або `ExpressPackage`, додає через > `add_order()`, отримує вартість через `shipping_cost()` та повертає `{"package_type": ..., > "weight_kg": ..., "distance_km": ..., "rate_per_kg_uah": ..., "cost_uah": ..., > "description": ...}`.
+> - **Інструмент (tool):** функція `get_delivery_cost(package_type: str, weight_kg: float, distance_km: float) -> dict` — **всередині функції** створює об'єкт `DeliveryService`, на > основі `package_type` створює `StandardPackage` або `ExpressPackage`, додає через > `add_order()`, отримує вартість через `shipping_cost()` та повертає `{"package_type": ..., > "weight_kg": ..., "distance_km": ..., "rate_per_kg_uah": ..., "cost_uah": ..., > "description": ...}`.
 > - **Промпт агента:** агент є помічником служби доставки "Nova Post". Він розраховує > вартість доставки посилок двох типів (стандартна/експрес) та пояснює з чого складається > ціна. Відповідає **українською мовою**.
 > - **Демонстрація:** поставте агенту 3 запитання з різними типами посилок, вагами та > відстанями.
 
