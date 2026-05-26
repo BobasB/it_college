@@ -40,22 +40,21 @@
 > [!NOTE]
 > Демонстраційний варіант 0 — Агент служби доставки *(зразок виконання)*
 > Цей варіант є готовим прикладом того, як має бути виконане завдання. Повна реалізація знаходиться у папці [`demo/`](demo/).
-
-### OOP-завдання
-Реалізуйте ієрархію класів для служби доставки посилок:
-
-1. Абстрактний клас `Package` з атрибутами `weight_kg: float`, `distance_km: float` та абстрактним методом `shipping_cost() -> float`.
-2. Класи `StandardPackage` та `ExpressPackage` що успадковують `Package` та реалізують `shipping_cost()`:
-   - `StandardPackage` має приватний атрибут `__rate_per_kg = 5.0` (інкапсуляція), властивість-геттер `rate`, формула: `weight_kg * rate + distance_km * 0.2`
-   - `ExpressPackage` має приватний `__rate_per_kg = 10.0` та класовий атрибут `SURCHARGE = 50.0`, формула: `weight_kg * rate + distance_km * 0.5 + SURCHARGE`
-3. Клас `DeliveryService` що:
-   - зберігає замовлення у приватному списку `__orders: list[Package]` (інкапсуляція)
-   - методи `add_order(package)`, `total_revenue() -> float`, `order_count() -> int`
-
-### AI-агент
-- **Інструмент (tool):** функція `get_delivery_cost(package_type: str, weight_kg: float, distance_km: float) -> dict` — **всередині функції** створює об'єкт `DeliveryService`, на основі `package_type` створює `StandardPackage` або `ExpressPackage`, додає через `add_order()`, отримує вартість через `shipping_cost()` та повертає `{"package_type": ..., "weight_kg": ..., "distance_km": ..., "rate_per_kg_uah": ..., "cost_uah": ..., "description": ...}`.
-- **Промпт агента:** агент є помічником служби доставки "Nova Post". Він розраховує вартість доставки посилок двох типів (стандартна/експрес) та пояснює з чого складається ціна. Відповідає **українською мовою**.
-- **Демонстрація:** поставте агенту 3 запитання з різними типами посилок, вагами та відстанями.
+> ### OOP-завдання
+> Реалізуйте ієрархію класів для служби доставки посилок:
+> 
+> 1. Абстрактний клас `Package` з атрибутами `weight_kg: float`, `distance_km: float` та > абстрактним методом `shipping_cost() -> float`.
+> 2. Класи `StandardPackage` та `ExpressPackage` що успадковують `Package` та реалізують > `shipping_cost()`:
+>    - `StandardPackage` має приватний атрибут `__rate_per_kg = 5.0` (інкапсуляція), > властивість-геттер `rate`, формула: `weight_kg * rate + distance_km * 0.2`
+>    - `ExpressPackage` має приватний `__rate_per_kg = 10.0` та класовий атрибут `SURCHARGE > = 50.0`, формула: `weight_kg * rate + distance_km * 0.5 + SURCHARGE`
+> 3. Клас `DeliveryService` що:
+>    - зберігає замовлення у приватному списку `__orders: list[Package]` (інкапсуляція)
+>    - методи `add_order(package)`, `total_revenue() -> float`, `order_count() -> int`
+> 
+> ### AI-агент
+> - **Інструмент (tool):** функція `get_delivery_cost(package_type: str, weight_kg: float, > distance_km: float) -> dict` — **всередині функції** створює об'єкт `DeliveryService`, на > основі `package_type` створює `StandardPackage` або `ExpressPackage`, додає через > `add_order()`, отримує вартість через `shipping_cost()` та повертає `{"package_type": ..., > "weight_kg": ..., "distance_km": ..., "rate_per_kg_uah": ..., "cost_uah": ..., > "description": ...}`.
+> - **Промпт агента:** агент є помічником служби доставки "Nova Post". Він розраховує > вартість доставки посилок двох типів (стандартна/експрес) та пояснює з чого складається > ціна. Відповідає **українською мовою**.
+> - **Демонстрація:** поставте агенту 3 запитання з різними типами посилок, вагами та > відстанями.
 
 ---
 
