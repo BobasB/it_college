@@ -22,7 +22,7 @@
     def count_symbols(text: str) -> int:
         return len(text)
     ```
-2. Перевірте функцію за допомогою `unittest`:
+2. Перевірте функцію за допомогою `unittest` (тест має бути у окремому класі, який наслідує `unittest.TestCase`):
     ```python
     def test_count_symbols(self):
         self.assertEqual(3, count_symbols("abc"))
