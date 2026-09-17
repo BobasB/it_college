@@ -1,6 +1,6 @@
 ### Налаштування середовища, Загальне налаштування (Windows):
 - встановлюєте програму для роботи з Git - уважно дивіться яку версію встановлюєте 32/64 біт: https://git-scm.com/download/win
-- встановлюєте останні версію Python 3.12+ (актуальна на даний час): https://www.python.org/downloads/windows/
+- встановлюєте останні версію Python 3.13+ (актуальна на даний час): https://www.python.org/downloads/windows/
 - встановлюєте редактор (Community edition) Visual Studio Code: https://code.visualstudio.com/
 
 > [!IMPORTANT] 
