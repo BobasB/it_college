@@ -29,7 +29,8 @@
    poetry init
    poetry add google-adk python-dotenv
    ```
-    1. Через вимого `google-adk` додайте у pyproject.toml наступні рядки для сумісності з Python 3.13:
+   > У цьому репозиторії [pyproject.toml](./pyproject.toml) та `poetry.lock` уже є — для готового прикладу достатньо `poetry install`. Команди `poetry init` / `poetry add` потрібні у вашому власному проєкті.
+    1. Через вимогу `google-adk` додайте у `pyproject.toml` наступний рядок (розділ `[project]`) для сумісності з Python 3.13:
     ```toml
     requires-python = ">=3.13,<4.0.0"
     ```
@@ -98,8 +99,19 @@
            dict: інформація про час у вказаному місті
        """
        # Це mock-реалізація для демонстрації
+       from zoneinfo import ZoneInfo
        import datetime
-       current_time = datetime.datetime.now().strftime("%H:%M:%S")
+       timezones = {
+           "львів": "Europe/Kyiv",
+           "київ": "Europe/Kyiv",
+           "лондон": "Europe/London",
+           "нью-йорк": "America/New_York",
+           "токіо": "Asia/Tokyo",
+       }
+       zone = timezones.get(city.strip().lower())
+       if zone is None:
+           return {"status": "error", "message": f"Невідоме місто: {city}"}
+       current_time = datetime.datetime.now(ZoneInfo(zone)).strftime("%H:%M:%S")
        return {
            "status": "success",
            "city": city,
@@ -279,10 +291,17 @@
        Returns:
            dict: результат перевірки
        """
-       # Проста перевірка для демонстрації
+       # Базова перевірка синтаксису Python за допомогою стандартного модуля ast
+       import ast
        if not code.strip():
            return {"status": "error", "message": "Код порожній"}
-       return {"status": "success", "message": "Синтаксис виглядає коректно", "language": language}
+       if language.lower() != "python":
+           return {"status": "error", "message": "Підтримується лише Python"}
+       try:
+           ast.parse(code)
+       except SyntaxError as error:
+           return {"status": "error", "message": f"Синтаксична помилка: {error.msg}", "line": error.lineno}
+       return {"status": "success", "message": "Синтаксис коректний", "language": language}
    
    root_agent = Agent(
        model='gemini-2.5-flash',
@@ -774,6 +793,31 @@ Workflow агенти - це спеціалізовані компоненти A
    - Loop: покращення звіту до досягнення якості
    
    Додайте код та результат у звіт.
+
+---
+### Що має бути у звіті
+- версії Python, Poetry, ADK;
+- код `agent.py` та скріншоти/діалоги для кожного агента: `my_first_agent`, `math_agent`, `student_helper` (мінімум 3 агенти) та workflow-агентів (`code_pipeline`, `story_improver`, `research_team`);
+- пояснення: призначення `poetry.lock`, класу `Agent`, параметра `tools`, механізму `exit_loop`, переваг Sequential/Parallel;
+- приклади логів (verbose / `logging`);
+- висновок за [шаблоном](../../reports/README.md).
+
+### Критерії оцінювання
+| Рівень | Що потрібно виконати |
+| --- | --- |
+| Достатній | Poetry + ADK встановлено, `my_first_agent` з інструментом запущено через `adk run` і `adk web` |
+| Високий | + 3 різні агенти, спільні інструменти в `tools/`, логування, Sequential-агент |
+| Відмінний | + Loop і Parallel агенти, агент зі станом, власний workflow, що поєднує всі типи |
+
+### Контрольні питання
+1. Що таке AI-агент і чим він відрізняється від простого запиту до LLM?
+1. Для чого агенту інструменти (`tools`) і чому їм потрібні докладні docstring та типи параметрів?
+1. Чим відрізняються Sequential, Loop та Parallel агенти?
+1. Чому API-ключ не можна комітити і як цьому запобігає `.gitignore`?
+1. Як передаються дані між агентами (`output_key` та `{змінна}` у `instruction`)?
+
+> [!TIP]
+> Готові приклади workflow-агентів лежать у цій папці: [code_pipeline](./code_pipeline/agent.py), [story_improver](./story_improver/agent.py), [research_team](./research_team/agent.py). Створіть власну папку командою `adk create`, скопіюйте в `agent.py` код прикладу і створіть `.env` з ключем (приклад — [.env.example](./.env.example)). Тема для `story_improver` передається просто повідомленням користувача.
 
 ---
 ### Здача роботи
