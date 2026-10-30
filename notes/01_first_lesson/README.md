@@ -48,7 +48,8 @@
 
 ### 4. Перший запуск Python
 1. Створіть будь-який файл `hello.py` із рядком `print("Hello, IT College!")`;
-1. Запустіть його командою `python hello.py` та кнопкою `Run Python File` у VS Code;
+1. У VS Code відкрийте `Extensions` та встановіть розширення `Python` від Microsoft (`ms-python.python`);
+1. Запустіть `hello.py` командою `python hello.py` та кнопкою `Run Python File` у VS Code;
 1. :star: Вкажіть у звіті результат запуску.
 
 ---
