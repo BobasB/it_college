@@ -14,3 +14,10 @@ def test_get_angles(figure_type, expected_angles):
 def test_invalid_length():
     with pytest.raises(AssertionError):
         Figure("квадрат", 0)
+
+
+def test_unknown_type_uses_fallback():
+    figure = Figure("квадрат", 1)
+    figure.type = "коло"
+
+    assert figure.get_angles == 0
