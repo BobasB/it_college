@@ -84,8 +84,10 @@ Python є лише інструментом доступу до бази, всі
     user_input = "x' OR '1'='1"
     # НЕБЕЗПЕЧНО: значення вставляється прямо в текст запиту
     c.execute(f"SELECT * FROM students WHERE lastname = '{user_input}'")
+    print(c.fetchall())
     # БЕЗПЕЧНО: значення передається окремо
     c.execute("SELECT * FROM students WHERE lastname = ?", (user_input,))
+    print(c.fetchall())
     ```
 1. :star: Поясніть у звіті, чому перший запит повертає всі записи, а другий — жодного.
 
