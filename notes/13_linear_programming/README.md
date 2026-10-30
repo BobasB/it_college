@@ -156,7 +156,7 @@ print(-res.fun)    # 2350.0
     | Ноутбук | Тема |
     | --- | --- |
     | [1_linear_programming.ipynb](./1_linear_programming.ipynb) | задача про прибуток на аукціоні, `scipy.optimize.linprog` |
-    | [gw2_economics/ecto.ipynb](./gw2_economics/ecto.ipynb) | аналіз даних із файлу `data.txt` (NumPy + гістограма) |
+    | [gw2_economics/ecto.ipynb](./gw2_economics/ecto.ipynb) | аналіз даних (NumPy + гістограма); скопіюйте також [data.txt](./gw2_economics/data.txt) у ту саму папку, що й ноутбук |
     | [2_sklearn.ipynb](./2_sklearn.ipynb) | регресія `RandomForestRegressor`, метрики якості |
 1. :star: Виконайте всі приклади та змініть вхідні дані (бюджет `B`, коефіцієнти прибутку/вартості), поясніть, як змінився розв'язок;
 
