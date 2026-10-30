@@ -31,11 +31,11 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Runs a single command using the runners shell
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Send greeting
       run: echo "Hello ${{ github.event.inputs.name }}"
     - name: Set-up Python
-      uses: actions/setup-python@v4.3.0
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python }}
       if: github.event.inputs.name != 'Executer'
@@ -54,7 +54,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Runs a single command using the runners shell
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Say goodbye
       if: github.event.inputs.name == 'Executer'
       run: echo "Goodbye ${{ github.event.inputs.name }}"
