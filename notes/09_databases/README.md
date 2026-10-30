@@ -74,7 +74,7 @@ Python є лише інструментом доступу до бази, всі
     UPDATE students SET lastname = ? WHERE id = ?
     DELETE FROM students WHERE id = ?
     ```
-    передавши параметри кортежем, наприклад `c.execute("DELETE FROM students WHERE id = ?", (1,))`;
+    Перед цими запитами знову відкрийте `conn = sqlite3.connect("my_database.db")` та створіть `c = conn.cursor()` (попередній блок закрив з'єднання). Передавайте параметри кортежем, наприклад `c.execute("DELETE FROM students WHERE id = ?", (1,))`, і збережіть зміни через `conn.commit()`. Залиште з'єднання відкритим для кроку 4 та закрийте його через `conn.close()` після завершення цього кроку;
 1. Перевірте `c.rowcount` після `UPDATE`/`DELETE` — скільки рядків змінено;
 1. :star: Покажіть у звіті таблицю до та після змін.
 
