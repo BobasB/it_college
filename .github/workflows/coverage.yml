@@ -31,10 +31,10 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Завантажуємо останню версію коду
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     # Ініціалізуємо Python
     - name: Set-up Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.python }}
     # встановлюємо Python пакети

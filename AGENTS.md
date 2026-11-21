@@ -34,7 +34,9 @@ cd example/testing/01_general_and_unittest && python -m unittest -v
 cd example/testing/02_pytest && python -m pytest -v
 cd example/testing/03_coverage && python -m coverage run -m pytest && python -m coverage report -m
 cd example/testing/04_integration_testing && python -m pytest -v     # потрібен flask
+cd example/testing/05_project_layout && python -m pytest -v
 cd example/databases && python -m pytest -v
+cd example/library && python -m pytest -v
 ```
 Потрібні пакети: `pytest`, `coverage`, `flask`. Не запускайте `pytest example/testing` одним викликом — буде `import file mismatch`.
 
@@ -50,7 +52,7 @@ cd example/databases && python -m pytest -v
 - Тести мають бути детермінованими (фіксований `seed`, тимчасові папки `tmp_path`, база `:memory:`).
 
 ## Безпека та приватність
-- **Ніколи** не комітьте `.env`, API-ключі (Google AI Studio тощо), `*.db`, віртуальні середовища, `__pycache__`, `.coverage`, `htmlcov/`, `.adk/`. Для ключів є `.env.example`.
+- **Ніколи** не комітьте `.env`, API-ключі та токени (Google AI Studio, Telegram BotFather тощо), `*.db`, віртуальні середовища, `__pycache__`, `.coverage`, `htmlcov/`, `.adk/`. Для ключів є `.env.example`.
 - У прикладах використовуйте плейсхолдери (`your_api_key_here`); SQL-запити — лише з параметрами (`?`).
 - Папки `my_first_agent/` та `demo/` навмисно в `.gitignore` (локальні експерименти з ключами) — не додавайте їх до коміту.
 

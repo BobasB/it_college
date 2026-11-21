@@ -22,6 +22,31 @@ cd example/testing/02_pytest
 python -m pytest -v
 ```
 
+## Структура проєкту: `src/` та `tests/`
+У реальних проєктах код і тести розділяють. Такий розподіл називають *src-layout*:
+```text
+05_project_layout/
+├── pyproject.toml        # налаштування pytest (pythonpath, testpaths)
+├── src/
+│   └── lab/              # пакет із кодом програми
+│       ├── __init__.py
+│       └── service.py
+└── tests/
+    └── test_service.py   # тести лише імпортують пакет lab
+```
+- тести імпортують код як звичайний пакет: `from lab.service import build_report`;
+- у `pyproject.toml` рядок `pythonpath = ["src"]` показує `pytest`, де шукати пакет `lab`; для `unittest` задайте змінну `PYTHONPATH=src` (Windows PowerShell: `$env:PYTHONPATH = "src"`);
+- у проєкті на Poetry пакет із `src/` підключають так: `[tool.poetry] packages = [{ include = "lab", from = "src" }]`;
+- у папці `tests/` назви файлів мають бути унікальними у межах проєкту.
+
+Приклад: [example/testing/05_project_layout](../../example/testing/05_project_layout), запуск:
+```bash
+cd example/testing/05_project_layout
+python -m pytest -v
+PYTHONPATH=src python -m unittest discover -s tests -v
+```
+:star: Скопіюйте приклад у власний проєкт, додайте до пакета `lab` другий модуль зі своїми функціями та тести для нього; запустіть тести обома способами.
+
 ## Формат проєкту
 Робота виконується як окремий Python-проєкт із використанням [Poetry](https://python-poetry.org/). Poetry створює ізольоване середовище, встановлює залежності та зберігає їхні сумісні версії у файлі `poetry.lock`.
 

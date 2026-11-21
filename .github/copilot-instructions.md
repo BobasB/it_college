@@ -28,7 +28,9 @@ cd example/coverage_io && python -m pytest test.py -v            # same as CI
 cd example/testing/02_pytest && python -m pytest -v
 cd example/testing/03_coverage && python -m coverage run -m pytest && python -m coverage report -m
 cd example/testing/04_integration_testing && python -m pytest -v  # needs flask
+cd example/testing/05_project_layout && python -m pytest -v
 cd example/databases && python -m pytest -v
+cd example/library && python -m pytest -v
 ```
 - CI (`.github/workflows/coverage.yml`) uses Python 3.10, `pytest` and `coverage`, then uploads to Codecov.
 - Dependencies for examples: `pytest`, `coverage`, `flask`. Labs on agents use Poetry (`notes/06_python_agents/pyproject.toml`, Python 3.13+).

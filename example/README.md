@@ -11,6 +11,8 @@
 | [testing/02_pytest](./testing/02_pytest) | `pytest`, fixtures, параметризація | [07 / 02](../notes/07_testing/02_pytest/README.md) | `cd example/testing/02_pytest && python -m pytest -v` |
 | [testing/03_coverage](./testing/03_coverage) | вимірювання покриття, `.coveragerc` | [07 / 03](../notes/07_testing/03_coverage/README.md) | `cd example/testing/03_coverage && python -m coverage run -m pytest && python -m coverage report -m` |
 | [testing/04_integration_testing](./testing/04_integration_testing) | Flask + SQLite + JSON, інтеграційні тести | [07 / 04](../notes/07_testing/04_integration_testing/README.md) | `cd example/testing/04_integration_testing && python -m pytest -v` (потрібен `flask`) |
+| [testing/05_project_layout](./testing/05_project_layout) | структура `src/` + `tests/`, `mock` та `monkeypatch` | [07](../notes/07_testing/README.md) | `cd example/testing/05_project_layout && python -m pytest -v` |
+| [library](./library) | ООП-проєкт «Бібліотека»: `Enum`, кілька класів, симуляція, тести | [05 / ООП-проєкт](../notes/05_OOP_library_project/README.md) | `cd example/library && python main.py && python -m pytest -v` |
 | [databases](./databases) | CRUD для SQLite з тестами | [09](../notes/09_databases/README.md) | `cd example/databases && python -m pytest -v` |
 | [data_science](./data_science) | приклад аналізу даних (ноутбук) | [11](../notes/11_numpy_basics/README.md) | відкрити `.ipynb` |
 | [gw2_economics](./gw2_economics) | аналіз цін (NumPy + matplotlib) з виводом комірок; ноутбук без виводу є в [notes/13_linear_programming/gw2_economics](../notes/13_linear_programming/gw2_economics) | [13](../notes/13_linear_programming/README.md) | відкрити `ecto.ipynb` (потрібен `data.txt` поряд) |

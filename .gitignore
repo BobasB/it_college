@@ -37,3 +37,5 @@ EXAMPLE_AGENT_STRUCTURE.md
 my_mass.npz
 users.txt
 *.db
+site/
+posts/

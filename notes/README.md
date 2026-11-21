@@ -23,6 +23,7 @@
 1. [Створення першого Python класу](./05_OOP_first_class/README.md);
 1. [Робота з класами (ноутбук)](./05_OOP_work_with_classes/README.md);
 1. [Парадигми в ООП](./05_OOP_paradigms/README.md);
+1. [ООП-проєкт: система управління бібліотекою](./05_OOP_library_project/README.md);
 
 > Інструменти розробника
 

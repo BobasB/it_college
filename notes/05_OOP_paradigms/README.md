@@ -127,6 +127,32 @@ print(circle.area())
 | **Інкапсуляція** | `__attack_power`, `_sharp`, `@property get_attack_power` | Обмежує прямий доступ до внутрішніх змінних   |
 | **Поліморфізм**  | `attack()` перевизначений у `Sword` і `Axe`              | Метод має однакове ім’я, але різну поведінку  |
 
+Структуру класів зручно подати UML-діаграмою (GitHub відображає `mermaid` у Markdown). `-` означає приватний, `_` — захищений, `+` — публічний член класу; клас `Item` абстрактний:
+```mermaid
+classDiagram
+    class Item {
+        <<abstract>>
+        +name: str
+        +health: int
+        +attack(another_item)*
+    }
+    class Sword {
+        -attack_power: int
+        #sharp: int
+        +attack(another_item)
+        +get_attack_power: str
+        +sharpening()
+    }
+    class Axe {
+        -attack_power: int
+        +attack(another_item)
+        +get_attack_power: str
+    }
+    Item <|-- Sword
+    Item <|-- Axe
+```
+:star: Додайте до діаграми клас `Bow` зі своїми атрибутами та методами й розмістіть її у звіті.
+
 ```python
 from abc import ABC, abstractmethod
 from random import randint

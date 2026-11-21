@@ -83,6 +83,18 @@ def test_text_file(text_file):
 ```
 `tmp_path` — вбудована fixture pytest для окремої тимчасової папки кожного тесту. Також корисні `monkeypatch` для тимчасової заміни атрибутів і змінних середовища та `capsys` для перевірки виводу в консоль.
 
+Приклад `monkeypatch`: підміна `input`, щоб протестувати функцію без ручного введення (після тесту `input` автоматично повертається до початкового стану):
+```python
+def ask_name() -> str:
+    return input("Введіть ім'я: ").strip().title()
+
+
+def test_ask_name(monkeypatch):
+    monkeypatch.setattr("builtins.input", lambda prompt: "  марта ")
+    assert ask_name() == "Марта"
+```
+Повний приклад з `unittest.mock` та `monkeypatch`: [example/testing/05_project_layout](../../../example/testing/05_project_layout/tests/test_service.py). Змінні середовища підміняються так: `monkeypatch.setenv("URL_TEST", "http://localhost")`.
+
 - :star: Додайте параметризований тест для всіх дозволених фігур.
 - :star: Створіть fixture, яка повертає фігуру з довжиною 10, і перевірте її властивості.
 - :fire: Додайте тест для кожного неправильного типу та кожного неправильного значення довжини.

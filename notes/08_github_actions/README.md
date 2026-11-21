@@ -84,6 +84,66 @@ jobs:
 1. :star: Спробуйте зробити свою умову та виконати/пропустити якийсь крок або завдання.
 
 ---
+### Запуск тестів у CI: тригери, матриця, залежності між завданнями
+Головна користь Actions — автоматично запускати тести при кожній зміні коду. Повний приклад Workflow, який перевіряє два приклади з цього репозиторію на двох версіях Python:
+```yml
+name: Tests
+
+on:
+  push:
+    branches: [main]
+    paths: ["example/**"]     # запускати лише якщо змінились файли у example/
+  pull_request:               # та при кожному Pull Request
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false        # не зупиняти інші комбінації, якщо одна впала
+      matrix:
+        project: [example/testing/02_pytest, example/testing/05_project_layout]
+        python: ["3.10", "3.13"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install pytest
+      - name: Run tests
+        working-directory: ${{ matrix.project }}   # аналог cd у shell
+        run: python -m pytest -v
+
+  report:
+    needs: test               # виконається лише після успішного завершення всіх комбінацій test
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Усі тести пройшли"
+```
+- `matrix` створює окреме завдання для кожної комбінації значень (тут 2 × 2 = 4 запуски) — так перевіряють підтримку кількох версій Python;
+- `needs` задає порядок: без нього завдання виконуються паралельно;
+- `working-directory` задає папку, у якій виконуються команди кроку;
+- `on.push.paths` та `branches` обмежують запуск, економлячи безкоштовні хвилини.
+
+Якщо проєкт використовує Poetry (є `poetry.lock`), установіть його до `setup-python`, щоб увімкнути кеш залежностей:
+```yml
+      - run: pipx install poetry
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: poetry
+      - run: poetry install
+        working-directory: notes/06_python_agents
+```
+Окремий скрипт теж можна запустити як крок (`run: bash ./scripts/check.sh` або `run: python scripts/check.py`) — зручно, коли перевірка складніша за одну команду.
+
+> [!WARNING]
+> Якщо Workflow не з'явився у вкладці `Actions`: перевірте, що файл лежить саме у `.github/workflows/` (з крапкою!), має розширення `.yml`/`.yaml` та коректні відступи. Помилку синтаксису GitHub показує на сторінці Workflow.
+
+1. :star: Створіть Workflow, який запускає тести одного з прикладів на двох версіях Python через `matrix`, та додайте завдання `report` із `needs`. Додайте скріншот вкладки `Actions` у звіт;
+1. :star: Навмисно зламайте тест, зробіть Pull Request і покажіть червоний статус перевірки. Виправте тест і покажіть зелений;
+1. :fire: Додайте до Workflow крок `pip install flake8` та `flake8 .` і поясніть, чому перевірку стилю варто виконувати в CI.
+
+---
 ### Баджі та статуси
 1. `README.md` файли завжди використовуються на головній сторінці репозиторію і зазвичай поміж описом самого репозиторію там знаходяться Баджі/Статуси які вказують результат виконання CI/CD систем. Оскільки в нас вже є декілька Workflow давайте зробимо Баджі.
 2. Перейдіть у вкладку `Actions`, виберіть Workflow (для прикладу `Manual workflow`) та у правому кутку натисніть на `...` звідки вийде меню де треба обрати `Create status badge`. Скопіюйте згенерований Markdown код та вставте в першу стрічку `README.md`. Для прикладу мій Workflow буде виглядати наступним чином:
@@ -142,7 +202,7 @@ jobs:
 1. Чому не варто зберігати паролі й токени прямо в yml (див. `secrets`)?
 
 > [!TIP]
-> Актуальні версії дій (`actions/checkout`, `actions/setup-python`) шукайте в Marketplace; старі версії (v3) можуть видавати попередження про застарілість.
+> Актуальні версії дій (`actions/checkout`, `actions/setup-python`) шукайте на сторінці Releases відповідного репозиторію або в Marketplace; старі версії можуть видавати попередження про застарілість (наприклад, через стару версію Node.js).
 
 ---
 ### Здача роботи
