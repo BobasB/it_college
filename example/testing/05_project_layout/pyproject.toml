@@ -1,0 +1,11 @@
+[project]
+name = "project-layout"
+version = "0.1.0"
+description = "Навчальний приклад структури проєкту src/ + tests/"
+requires-python = ">=3.10"
+dependencies = []
+
+# pythonpath дозволяє pytest імпортувати пакет lab із папки src без встановлення проєкту
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

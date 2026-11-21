@@ -1,6 +1,52 @@
 # Тестування
 > Роботу №07 поділено на чотири послідовні частини. Для кожної частини використовуйте окрему папку з матеріалами та прикладами. Даний опис містить загальне налаштування проєкту та інструкції щодо запуску тестів.
 
+## Мета роботи
+Навчитись перевіряти правильність програм автоматично: писати юніт-тести (`unittest`, `pytest`), вимірювати покриття коду (`coverage`) та тестувати взаємодію компонентів (веб, база даних, файли).
+
+## Що потрібно знати / підготувати
+- виконані роботи про [ООП](../05_OOP_first_class/README.md) та [віртуальні середовища](../06_python_virtualenvs/README.md);
+- Python 3.13+ та Poetry (`poetry --version`) або віртуальне середовище з `pip`;
+- робочі приклади лежать у [example/testing](../../example/testing); їх можна запускати прямо з цих папок (див. нижче).
+
+## Порядок виконання
+1. [Загальне тестування та юніт-тести](01_general_and_unittest/README.md)
+2. [Тестування з бібліотекою pytest](02_pytest/README.md)
+3. [Покриття коду](03_coverage/README.md)
+4. [Інтеграційне тестування: вебзастосунки, файли та бази даних](04_integration_testing/README.md)
+
+## Швидкий запуск прикладів
+У кожній папці `example/testing/*` є власний `app.py`, тому тести запускаються **з відповідної папки** (інакше `pytest` повідомить `import file mismatch`, адже файли `test_app.py` та `app.py` називаються однаково в різних папках):
+```bash
+cd example/testing/02_pytest
+python -m pytest -v
+```
+
+## Структура проєкту: `src/` та `tests/`
+У реальних проєктах код і тести розділяють. Такий розподіл називають *src-layout*:
+```text
+05_project_layout/
+├── pyproject.toml        # налаштування pytest (pythonpath, testpaths)
+├── src/
+│   └── lab/              # пакет із кодом програми
+│       ├── __init__.py
+│       └── service.py
+└── tests/
+    └── test_service.py   # тести лише імпортують пакет lab
+```
+- тести імпортують код як звичайний пакет: `from lab.service import build_report`;
+- у `pyproject.toml` рядок `pythonpath = ["src"]` показує `pytest`, де шукати пакет `lab`; для `unittest` задайте змінну `PYTHONPATH=src` (Windows PowerShell: `$env:PYTHONPATH = "src"`);
+- у проєкті на Poetry пакет із `src/` підключають так: `[tool.poetry] packages = [{ include = "lab", from = "src" }]`;
+- у папці `tests/` назви файлів мають бути унікальними у межах проєкту.
+
+Приклад: [example/testing/05_project_layout](../../example/testing/05_project_layout), запуск:
+```bash
+cd example/testing/05_project_layout
+python -m pytest -v
+PYTHONPATH=src python -m unittest discover -s tests -v
+```
+:star: Скопіюйте приклад у власний проєкт, додайте до пакета `lab` другий модуль зі своїми функціями та тести для нього; запустіть тести обома способами.
+
 ## Формат проєкту
 Робота виконується як окремий Python-проєкт із використанням [Poetry](https://python-poetry.org/). Poetry створює ізольоване середовище, встановлює залежності та зберігає їхні сумісні версії у файлі `poetry.lock`.
 
@@ -26,9 +72,7 @@
 
 ```toml
 [tool.pytest.ini_options]
-testpaths = [
-	"example/testing"
-]
+testpaths = ["tests"]
 python_files = ["test_*.py"]
 markers = [
 	"unit: швидкі юніт-тести",
@@ -37,7 +81,7 @@ markers = [
 
 [tool.coverage.run]
 branch = true
-source = ["example/testing"]
+source = ["app"]
 
 [tool.coverage.report]
 omit = [
@@ -45,6 +89,9 @@ omit = [
 	"*/__init__.py"
 ]
 ```
+
+> [!WARNING]
+> Не вказуйте у `testpaths` одразу всі папки `example/testing/*`: у них однакові назви `app.py` та `test_app.py`, і `pytest` завершиться помилкою `import file mismatch`. У власному проєкті тримайте один `app.py` та тести в одній папці.
 
 Такі налаштування дозволяють запускати короткі команди без повторення параметрів:
 ```bash
@@ -94,10 +141,10 @@ make clean
 
 У `Makefile` кожен відступ перед командою має бути символом табуляції. Цілі `unit` та `integration` працюватимуть після додавання відповідних маркерів до тестів. `make html` створює папку `htmlcov/`, яку не потрібно комітити до репозиторію.
 
-1. [Загальне тестування та юніт-тести](01_general_and_unittest/README.md)
-2. [Тестування з бібліотекою pytest](02_pytest/README.md)
-3. [Покриття коду](03_coverage/README.md)
-4. [Інтеграційне тестування: вебзастосунки, файли та бази даних](04_integration_testing/README.md)
-
+## Контрольні питання
+1. Чим юніт-тест відрізняється від інтеграційного?
+1. Що таке fixture і навіщо вона потрібна?
+1. Що означає 100% покриття та чому воно не гарантує відсутність помилок?
+1. Для чого потрібні маркери `pytest` і конфігурація у `pyproject.toml`?
 
 ---

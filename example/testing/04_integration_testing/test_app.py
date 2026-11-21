@@ -48,3 +48,13 @@ def test_create_task_requires_title(resources):
 
     assert response.status_code == 400
     assert not export_path.exists()
+
+
+@pytest.mark.parametrize("payload", [{"title": None}, {"title": 123}, {"title": "   "}, ["title"]])
+def test_create_task_rejects_invalid_title(resources, payload):
+    client, _, export_path = resources
+
+    response = client.post("/tasks", json=payload)
+
+    assert response.status_code == 400
+    assert not export_path.exists()

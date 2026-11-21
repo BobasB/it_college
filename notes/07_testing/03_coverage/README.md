@@ -9,6 +9,8 @@ poetry add --group dev coverage pytest pytest-cov
 ```
 
 ## Приклад
+> Приклад у [example/testing/03_coverage](../../../example/testing/03_coverage) не містить `pyproject.toml`. Є два способи: скопіювати файли у власний Poetry-проєкт (див. [загальну інструкцію](../README.md)) і використовувати `poetry run ...`, або запускати команди прямо з папки прикладу через `python -m ...` (замініть `poetry run` на `python -m` там, де це застосовно: `python -m pytest`, `python -m coverage`).
+
 1. Перейдіть до `example/testing/03_coverage`.
 2. Запустіть тести:
     ```bash
@@ -161,3 +163,9 @@ poetry run coverage xml
 - додайте результати окремих запусків `unittest` і `pytest`;
 - поясніть, чому використали або не використали `pragma: no cover`;
 - додайте HTML- або XML-звіт та поясніть його призначення.
+
+### Контрольні питання
+1. Чим line coverage відрізняється від branch coverage?
+1. Для чого потрібен `.coveragerc`?
+1. Чому 100% покриття не означає відсутність помилок?
+1. Що таке `pragma: no cover` та коли його доречно застосовувати?

@@ -38,8 +38,9 @@ def create_app(db_path: Path, export_path: Path) -> Flask:
 
     @app.post("/tasks")
     def create_task():
-        data = request.get_json(silent=True) or {}
-        title = data.get("title", "").strip()
+        data = request.get_json(silent=True)
+        title = data.get("title") if isinstance(data, dict) else None
+        title = title.strip() if isinstance(title, str) else ""
         if not title:
             return jsonify({"error": "Поле title є обов'язковим"}), 400
 
