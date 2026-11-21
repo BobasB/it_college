@@ -164,13 +164,6 @@ poetry run coverage xml
 - поясніть, чому використали або не використали `pragma: no cover`;
 - додайте HTML- або XML-звіт та поясніть його призначення.
 
-### Критерії оцінювання
-| Рівень | Що потрібно виконати |
-| --- | --- |
-| Достатній | отримано звіт `coverage report -m` для `unittest` і `pytest` |
-| Високий | + branch coverage, HTML-звіт, тести для всіх гілок `get_angles` |
-| Відмінний | + поріг `fail_under`, `pragma: no cover` з обґрунтуванням, coverage у CI |
-
 ### Контрольні питання
 1. Чим line coverage відрізняється від branch coverage?
 1. Для чого потрібен `.coveragerc`?

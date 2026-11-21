@@ -14,7 +14,7 @@ Short, actionable guidance for AI coding agents contributing to the IT College t
 - This repository is one of several independent Git repositories in the parent workspace. Run Git and project commands from this repository root, not from the workspace container.
 
 ## Lab README structure
-Every lab README has: Мета → Що потрібно знати → Хід роботи → Що має бути у звіті → Критерії оцінювання → Контрольні питання → Здача роботи. Markers: `:star:` (must appear in the report), `:fire:` (advanced), `> [!WARNING]` (common mistake). Give OS-specific commands for Windows and macOS/Linux when they differ. Verify every command/snippet you add by running it.
+Every lab README has: Мета → Що потрібно знати → Хід роботи → Що має бути у звіті → Контрольні питання → Здача роботи. Markers: `:star:` (must appear in the report), `:fire:` (advanced), `> [!WARNING]` (common mistake). Give OS-specific commands for Windows and macOS/Linux when they differ. Verify every command/snippet you add by running it.
 
 ## Project conventions
 - Examples are plain Python files and Jupyter notebooks (under `example/` and `notes/`).
